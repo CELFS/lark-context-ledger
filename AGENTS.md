@@ -1,4 +1,4 @@
-# work-context 工作规则
+# lark-context-ledger 工作规则
 
 ## 用途与边界
 
@@ -15,15 +15,16 @@
 
 ## 工作入口
 
-涉及本仓库采集、任务整理或沟通回顾，先读取 [.agents/skills/work-context/SKILL.md](.agents/skills/work-context/SKILL.md)，再按需读取关联规则。
+涉及本仓库采集、任务整理或沟通回顾，先读取 [.agents/skills/lark-context-ledger/SKILL.md](.agents/skills/lark-context-ledger/SKILL.md)，再按需读取关联规则。
 
 已授权本地整理可直接执行；未确认的来源、运行时段和回溯日期不能猜测。没有可执行配置时，只整理用户主动提供的资料，不调用飞书。
 
 ## 本地配置与输出
 
 - 真实来源配置仅使用 `config/sources.local.json`，该文件 Git 忽略；示例 JSON 不参与运行，真实配置不复制到可追踪的规则或示例中。
-- 所有输出统一写入 `output/`。每个任务在 `tasks/YYYYMMDD/<任务目录>/` 仅提供 `YYYYMMDD-来源或主题-整理稿.md`、`YYYYMMDD-来源或主题-原文归档.md` 和 `attachments/`；日常默认读整理稿。
+- 所有输出统一写入 `output/`。每个任务在 `reports/YYYYMMDD/<任务目录>/` 仅提供 `YYYYMMDD-来源或主题-整理稿.md`、`YYYYMMDD-来源或主题-原文归档.md` 和 `attachments/`；日常默认读整理稿。
 - 任务目录使用 `NN-topic-MMDD_HHmm-MMDD_HHmm-主题-来源` 或 `NN-watch-MMDD_HHmm-主题-来源`。外层为创建日期；当天序号依次追加。watch 仅标起始时间，后续沿用原目录；具体规则见 `rules/records.md`。
+- 项目仓库忽略整个 `output/`；`output/reports/` 由用户手动初始化为独立本地仓库并维护版本，附件仍忽略。AI 不执行 Git 修改操作。
 - `output/work/` 保存过程文件，`output/state/` 保存同步状态，附件本地保留；三者均 Git 忽略。原稿每条消息仅保留一次，保留说话人、时间、正文与回复关联，不展示内部字段，不重复嵌入附件全文。
 - 任务需求和内部索引放在 `output/work/YYYYMMDD/<任务目录>/`；根 `LOG.md` 仅记录不含具体业务内容的维护或运行日志。
 

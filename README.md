@@ -1,6 +1,6 @@
-# work-context
+# lark-context-ledger
 
-采集工作沟通，整理任务与背景，回顾沟通方式，提前发现口径缺口。飞书严格只读，AI 不发送消息、不修改业务数据。
+基于 Lark CLI 采集工作沟通，整理任务与背景，回顾沟通方式，提前发现口径缺口。飞书严格只读，AI 不发送消息、不修改业务数据。
 
 ## 日常使用
 
@@ -10,7 +10,7 @@
 
 ```text
 output/
-  tasks/YYYYMMDD/
+  reports/YYYYMMDD/
     NN-topic-MMDD_HHmm-MMDD_HHmm-主题-来源/
       YYYYMMDD-主题-整理稿.md      日常阅读：背景、结论、变化和待办
       YYYYMMDD-主题-原文归档.md    查证：说话人、时间、正文和回复关联
@@ -25,6 +25,8 @@ output/
 文件名使用整理日期（YYYYMMDD）、来源或具体主题、文档类型，避免只用“整理稿”或“原文归档”。正文保留覆盖的消息时间范围。原文每条只保存一次，附件不重复嵌入全文。后续默认先读整理稿，再按需追溯原文；已有资料复用，增量更新。
 
 README 仅说明用途与用法；具体需求和结果全部在 output/。根 LOG.md 只记录不含具体业务内容的维护或运行日志。
+
+项目仓库忽略整个 `output/`。`output/reports/` 用于独立的本地 Git 仓库，保存报告版本；附件由其内部 `.gitignore` 忽略，过程材料和同步状态不纳入报告仓库。独立仓库由用户手动初始化和提交，不配置远程地址。
 
 ## 配置与命令
 
@@ -43,4 +45,4 @@ python3 scripts/build_document.py 'output/work/YYYYMMDD/任务目录/topic-index
 
 ## 规则入口
 
-[总边界](AGENTS.md) · [本地技能](.agents/skills/work-context/SKILL.md) · [采集规则](rules/sync.md) · [记录规则](rules/records.md) · [沟通回顾](rules/communication.md) · [日志](LOG.md)
+[总边界](AGENTS.md) · [本地技能](.agents/skills/lark-context-ledger/SKILL.md) · [采集规则](rules/sync.md) · [记录规则](rules/records.md) · [沟通回顾](rules/communication.md) · [日志](LOG.md)

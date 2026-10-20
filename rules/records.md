@@ -1,6 +1,6 @@
 # 记录与任务
 
-所有任务、通知整理和复盘均按任务保存在 output/tasks/YYYYMMDD/<任务目录>/，日常默认读整理稿。过程文件放在 output/work/，同步状态放在 output/state/；过程、状态与附件均 Git 忽略。
+所有任务、通知整理和复盘均按任务保存在 output/reports/YYYYMMDD/<任务目录>/，日常默认读整理稿。过程文件放在 output/work/，同步状态放在 output/state/；过程、状态与附件均 Git 忽略。
 
 ## 分类与关联
 

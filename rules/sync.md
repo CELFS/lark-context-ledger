@@ -14,7 +14,7 @@
 
 ## 增量与恢复约束
 
-scripts/sync.py 按以下约束执行手动采集。采集消息、游标和待处理数据放在 output/state/，分批导出等过程材料放在 output/work/，最终两份文档放在 output/tasks/YYYYMMDD/<任务目录>/；过程、状态和附件均 Git 忽略：
+scripts/sync.py 按以下约束执行手动采集。采集消息、游标和待处理数据放在 output/state/，分批导出等过程材料放在 output/work/，最终两份文档放在 output/reports/YYYYMMDD/<任务目录>/；过程、状态和附件均 Git 忽略：
 
 - 各会话独立保存上次成功位置；首次起点由用户确认，后续回溯 10 分钟并按消息 ID 去重。
 - 消息保留来源会话、消息 ID、发送者、发生时间、采集时间、链接或可定位标识。相同消息的新版本保留变更证据。
