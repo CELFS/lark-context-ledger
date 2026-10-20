@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # 用途：基于已采集消息和审阅索引生成一份时间顺序原稿与一份日常整理稿。
-# 用法（在仓库根目录）：python3 scripts/build_document.py output/work/<任务ID>/topic-index.json
+# 用法（在仓库根目录）：python3 scripts/build_document.py output/work/YYYYMMDD/<任务目录>/topic-index.json
 # 索引格式和人工核对规则见 rules/records.md；只读取本地文件，不调用飞书或 AI API。
 
 import argparse

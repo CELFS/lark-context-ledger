@@ -10,13 +10,17 @@
 
 ```text
 output/
-  tasks/<任务ID>/
-    YYYYMMDD-主题-整理稿.md      日常阅读：背景、结论、变化和待办
-    YYYYMMDD-主题-原文归档.md    查证：说话人、时间、正文和回复关联
-    attachments/       原附件，本地保留，Git 忽略
+  tasks/YYYYMMDD/
+    NN-topic-MMDD_HHmm-MMDD_HHmm-主题-来源/
+      YYYYMMDD-主题-整理稿.md      日常阅读：背景、结论、变化和待办
+      YYYYMMDD-主题-原文归档.md    查证：说话人、时间、正文和回复关联
+      attachments/               原附件，本地保留，Git 忽略
+    NN-watch-MMDD_HHmm-主题-来源/  持续监听，仅标起始时间；文档结构同上
   work/                过程材料，Git 忽略
   state/               同步状态，Git 忽略
 ```
+
+目录按创建日期归档，NN 为当天创建顺序，依次追加且不重排。`topic` 表示主题整理，包含消息起止时间；`watch` 表示持续监听，仅含消息起始时间，后续更新沿用原目录，最新覆盖时间写在正文中。目录时间统一使用北京时间。命名为 watch 不代表已经启用监听。过程材料按相同日期和任务目录放入 `output/work/`。
 
 文件名使用整理日期（YYYYMMDD）、来源或具体主题、文档类型，避免只用“整理稿”或“原文归档”。正文保留覆盖的消息时间范围。原文每条只保存一次，附件不重复嵌入全文。后续默认先读整理稿，再按需追溯原文；已有资料复用，增量更新。
 
@@ -32,7 +36,7 @@ README 仅说明用途与用法；具体需求和结果全部在 output/。根 L
 python3 scripts/sync.py status
 python3 scripts/sync.py collect --chat '配置中的名称'
 python3 scripts/sync.py export --chat '配置中的名称'
-python3 scripts/build_document.py output/work/任务ID/topic-index.json
+python3 scripts/build_document.py 'output/work/YYYYMMDD/任务目录/topic-index.json'
 ```
 
 名称定位使用 sync.py resolve，备份核对使用 reconcile_backup.py --source '群名' --backup '姓名' --day YYYY-MM-DD。未启用定时运行；脚本负责采集与保存，AI 负责理解和整理。

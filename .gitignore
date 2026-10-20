@@ -5,4 +5,4 @@
 /output/state/
 
 # 附件本地保留，不纳入 Git。
-/output/tasks/*/attachments/
+/output/tasks/**/attachments/
