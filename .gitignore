@@ -1,0 +1,2 @@
+# 真实监听来源仅保存在本地；output/ 暂不忽略。
+/config/sources.local.json
