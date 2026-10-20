@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# 用途：基于已采集消息和 AI 审阅后的话题索引生成“分话题原文 + 独立整理章节”。
-# 用法（在仓库根目录）：python3 scripts/build_document.py output/state/<话题索引>.json
+# 用途：基于已采集消息和审阅索引生成一份时间顺序原稿与一份日常整理稿。
+# 用法（在仓库根目录）：python3 scripts/build_document.py output/work/<任务ID>/topic-index.json
 # 索引格式和人工核对规则见 rules/records.md；只读取本地文件，不调用飞书或 AI API。
 
 import argparse
@@ -78,7 +78,6 @@ def build(manifest):
     if not topics or len({t['title'] for t in topics}) != len(topics):
         raise ValueError('必须有非空且标题不重复的话题。')
     used = set()
-    summaries = []
     for topic in topics:
         if not topic.get('title', '').strip() or not topic.get('message_ids'):
             raise ValueError('每个话题须有标题和原文消息 ID。')
@@ -86,11 +85,6 @@ def build(manifest):
             if mid not in pool:
                 raise ValueError('话题引用了范围外或未采集的消息：' + mid)
             used.add(mid)
-        summary_path = inside_output(topic['summary'])
-        summary = summary_path.read_text(encoding='utf-8').strip()
-        if not summary:
-            raise ValueError('话题整理章节尚未完成。')
-        summaries.append(summary)
     excluded = manifest.get('excluded', {})
     if not isinstance(excluded, dict) or any(not isinstance(reason, str) or not reason.strip() for reason in excluded.values()):
         raise ValueError('排除项须按消息 ID 记录明确理由。')
@@ -101,83 +95,66 @@ def build(manifest):
         raise ValueError('仍有未分类消息，不能直接遗漏：' + ', '.join(sorted(missing)[:10]))
     deleted_ids = {mid for mid, row in pool.items() if row['message'].get('deleted')}
     gaps = [g for g in gaps if g['message_id'] in used and (g['message_id'] not in deleted_ids or '已撤回' in g['reason'])]
-    lines = ['# ' + manifest['title'], '',
-             '- 整理范围：' + start.isoformat() + ' 至 ' + end.isoformat(),
-             '- 来源：' + '、'.join(sources),
-             '- 已审阅消息：' + str(len(pool)) + '；话题引用：' + str(len(used)) + '；排除：' + str(len(excluded)),
-             '- 本文原文为 CLI 返回的文本；编辑消息只代表采集时版本，附件正文不自动包含。', '']
-    lines += ['## 目录', '', '- [采集核对与阅读说明](#archive-intro)', '- [一、按话题归档的原文](#archive-original)', '- [二、独立的话题整理](#archive-summary)', '- [三、跨话题进展与待确认](#archive-review)', '- [四、原始 Markdown 附件全文](#archive-attachments)', '- [五、排除记录](#archive-excluded)', '']
-    if manifest.get('intro'):
-        lines += ['<a id="archive-intro"></a>', '']
-        lines += ['## 采集核对与阅读说明', '', inside_output(manifest['intro']).read_text(encoding='utf-8').strip(), '']
+    summary_destination = inside_output(manifest['summary_output'])
+    if destination.parent != summary_destination.parent or destination == summary_destination:
+        raise ValueError('原稿和整理稿须为同一任务目录下的不同文件。')
+    reading = inside_output(manifest['reading_draft']).read_text(encoding='utf-8').strip()
+    if not reading:
+        raise ValueError('请先完成整理稿，不能仅交付内部索引。')
+    lines = ['# ' + manifest['title'] + ' · 原稿', '',
+             '范围：' + start.strftime('%Y-%m-%d %H:%M') + ' 至 ' + end.strftime('%Y-%m-%d %H:%M') + '（北京时间）。',
+             '来源：' + '、'.join(sources) + '。', '',
+             '按时间顺序保留消息，每条仅出现一次。时间按原消息可见精度显示；正文为采集时可见版本。附件本地保存，未纳入 Git，正文不重复嵌入附件全文。', '',
+             '[阅读整理稿](' + summary_destination.name + ')', '']
     if gaps:
-        lines += ['## 完整性限制', '']
-        for gap in gaps:
-            lines.append('- ' + gap['source'] + ' / ' + gap['message_id'] + '：' + gap['reason'])
-        lines.append('')
-    lines += ['<a id="archive-original"></a>', '', '## 一、按话题归档的原文', '']
-    anchored = set()
-    for topic in topics:
-        lines += ['### ' + topic['title'], '']
-        selected = sorted((row for mid, row in pool.items() if mid in topic['message_ids']),
-                          key=lambda row: message_order(row['message']))
-        for row in selected:
-            m = row['message']
-            sender = m.get('sender', {})
-            if m['message_id'] not in anchored:
-                lines += ['<a id="' + m['message_id'] + '"></a>', '']
-                anchored.add(m['message_id'])
-            lines += ['#### ' + message_time(m).isoformat() + ' · ' + str(sender.get('name') or sender.get('id') or '发送者未返回'), '',
-                      '- 来源：' + row['source_name'] + '；消息 ID：' + m['message_id'],
-                      '- 消息类型：' + str(m.get('msg_type', '未知'))]
-            if m.get('deleted'):
-                lines.append('- 状态：已撤回；CLI 返回的 Invalid 标记不是可恢复的原文正文。')
-            if m.get('updated'):
-                lines.append('- 版本：消息曾编辑，以下为本次采集到的版本。')
-            if m.get('reply_to'):
-                lines.append('- 回复关系：' + json.dumps(m['reply_to'], ensure_ascii=False))
-            if m.get('thread_id'):
-                lines.append('- 话题 ID：' + m['thread_id'])
-            if m.get('message_app_link'):
-                lines.append('- 链接：' + m['message_app_link'])
-            body = text(m)
-            fence = '`' * max(4, max((len(v) for v in re.findall(r'`{3,}', body)), default=3) + 1)
-            lines += ['', fence + 'text', body, fence, '']
-            for resource in by_message.get(m['message_id'], []):
-                label = resource['key']
-                if resource['type'] == 'image':
-                    lines += ['![原始截图 ' + m['message_id'] + '](' + relative(resource['path']) + ')', '']
-                else:
-                    lines += ['[下载的原附件](' + relative(resource['path']) + ')；全文见本文附件章节。', '']
-    lines += ['<a id="archive-summary"></a>', '', '## 二、独立的话题整理', '']
-    for topic, summary in zip(topics, summaries):
-        lines += ['### ' + topic['title'], '', summary, '']
-    if manifest.get('review'):
-        lines += ['<a id="archive-review"></a>', '', '## 三、跨话题进展与待确认', '', inside_output(manifest['review']).read_text(encoding='utf-8').strip(), '']
-    if manifest.get('include_attachments'):
-        lines += ['<a id="archive-attachments"></a>', '', '## 四、原始 Markdown 附件全文', '', '附件按发送时版本原样保存；其中的路径、接口和实现声明属于当时文档，不自动视为当前已实现状态。原文中的本地相对路径保留在代码块内，引用时请结合来源仓库。', '']
-        for resource in resources:
-            if resource.get('ok') and resource['type'] == 'file' and resource['message_id'] in pool and resource['message_id'] in used:
-                body = inside_output(resource['path']).read_text(encoding='utf-8')
-                fences = [len(v) for v in re.findall(r'`{3,}', body)]
-                fence = '`' * max(4, max(fences, default=3) + 1)
-                m = pool[resource['message_id']]['message']
-                filename = re.search(r'name="([^"]+)"', m['content'])
-                label = filename.group(1) if filename else resource['message_id']
-                lines += ['### ' + m['create_time'] + ' · ' + label, '', '- 消息 ID：' + resource['message_id'], '', fence + 'markdown', body, fence, '']
-    lines += ['<a id="archive-excluded"></a>', '', '## 五、排除记录', '']
-    for mid, reason in excluded.items():
-        lines.append('- ' + mid + '：' + reason)
-    if not excluded:
-        lines.append('本次没有排除消息。')
-    destination = inside_output(manifest['output'])
+        deleted_count = len({g['message_id'] for g in gaps if '已撤回' in g['reason']})
+        if deleted_count:
+            lines += ['本范围有 ' + str(deleted_count) + ' 条撤回消息无法恢复正文，按原位置标记。', '']
+        other = [g for g in gaps if '已撤回' not in g['reason']]
+        if other:
+            lines += ['其他缺口：' + '；'.join(dict.fromkeys(g['reason'] for g in other)), '']
+    rows = sorted(pool.values(), key=lambda row: message_order(row['message']))
+    for row in rows:
+        m = row['message']
+        mid = m['message_id']
+        sender = str(m.get('sender', {}).get('name') or '发送者未返回')
+        label = message_time(m).strftime('%m-%d %H:%M') + ' · ' + sender
+        if m.get('message_app_link'):
+            label = '[' + label + '](' + m['message_app_link'] + ')'
+        lines += ['<a id="' + mid + '"></a> **' + label + '**']
+        parent = m.get('reply_to')
+        if isinstance(parent, dict):
+            parent = parent.get('message_id')
+        if parent:
+            if parent in pool:
+                previous = pool[parent]['message']
+                parent_label = str(previous.get('sender', {}).get('name') or '此前消息') + ' ' + message_time(previous).strftime('%m-%d %H:%M')
+                lines += ['回复：[' + parent_label + '](#' + parent + ')', '']
+            else:
+                lines += ['回复此前消息（不在本次采集范围内）。', '']
+        if m.get('deleted'):
+            lines += ['此条消息已撤回，原文无法恢复。', '']
+            continue
+        body = text(m)
+        fence = '`' * max(4, max((len(v) for v in re.findall(r'`{3,}', body)), default=3) + 1)
+        lines += [fence + 'text', body, fence, '']
+        for resource in by_message.get(mid, []):
+            filename = re.search(r'name="([^\"]+)"', body)
+            resource_label = filename.group(1) if resource['type'] == 'file' and filename else '原始截图'
+            lines += ['附件：[' + resource_label + '](' + relative(resource['path']) + ')', '']
+    # ID 仅用于不可见锚点与关联校验，不在阅读正文中展开内部字段。
+    for target in re.findall(re.escape(destination.name) + r'#([^\)]+)', reading):
+        if target not in pool:
+            raise ValueError('整理稿引用的原消息不存在：' + target)
     atomic(destination, '\n'.join(lines))
-    return {'document': str(destination.relative_to(ROOT)), 'messages': len(pool),
-            'topic_messages': len(used), 'excluded': len(excluded), 'content_gaps': gaps}
+    atomic(summary_destination, reading + '\n')
+    return {'original': str(destination.relative_to(ROOT)), 'summary': str(summary_destination.relative_to(ROOT)),
+            'messages': len(pool), 'content_gaps': gaps}
+
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='按话题保留消息原文，并拼接经审阅的独立整理章节。')
+    parser = argparse.ArgumentParser(description='保存单份时间顺序原稿与日常整理稿。')
     parser.add_argument('manifest', help='output/ 内的话题索引 JSON')
     args = parser.parse_args()
     try:

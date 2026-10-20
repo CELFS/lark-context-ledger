@@ -22,7 +22,9 @@
 ## 本地配置与输出
 
 - 真实来源配置仅使用 `config/sources.local.json`，该文件 Git 忽略；示例 JSON 不参与运行，真实配置不复制到可追踪的规则或示例中。
-- 所有运行数据、业务记录与报告统一写入 `output/`，下分 `records/`、`state/`、`reports/`，暂不 Git 忽略。具体任务的需求、执行范围与成果入口保存在 `output/records/tasks/<任务ID>/`；根 `LOG.md` 仅记录不含具体业务内容的维护或运行日志。
+- 所有输出统一写入 `output/`。每个任务在 `tasks/<任务ID>/` 仅提供 `YYYYMMDD-来源或主题-整理稿.md`、`YYYYMMDD-来源或主题-原文归档.md` 和 `attachments/`；日常默认读整理稿。
+- `output/work/` 保存过程文件，`output/state/` 保存同步状态，附件本地保留；三者均 Git 忽略。原稿每条消息仅保留一次，保留说话人、时间、正文与回复关联，不展示内部字段，不重复嵌入附件全文。
+- 任务需求和内部索引放在 `output/work/<任务ID>/`；根 `LOG.md` 仅记录不含具体业务内容的维护或运行日志。
 
 - README 仅说明用途、结构和用法；skill 与 rules 仅保留可复用规则，不写具体会话、任务日期、业务内容或成果入口。
 

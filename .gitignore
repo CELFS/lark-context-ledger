@@ -1,2 +1,8 @@
-# 真实监听来源仅保存在本地；output/ 暂不忽略。
+# 真实监听来源仅保存在本地。
 /config/sources.local.json
+# 过程文件与同步状态本地保留，最终任务文档继续追踪。
+/output/work/
+/output/state/
+
+# 附件本地保留，不纳入 Git。
+/output/tasks/*/attachments/

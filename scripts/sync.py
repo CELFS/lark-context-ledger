@@ -292,7 +292,7 @@ def export(name, mapping):
     if not book:
         raise ValueError('该来源还没有采集记录。')
     rows = sorted(book['messages'].values(), key=lambda row: message_order(row['message']))
-    destination = ROOT / 'output/records/sources' / key(cid)
+    destination = ROOT / 'output/work/sources' / key(cid)
     files = []
     for offset in range(0, len(rows), 100):
         batch = rows[offset:offset + 100]

@@ -14,7 +14,7 @@
 
 ## 增量与恢复约束
 
-scripts/sync.py 按以下约束执行手动采集。所有采集消息、游标、待处理数据与运行结果放在 output/state/，业务记录放在 output/records/，报告放在 output/reports/：
+scripts/sync.py 按以下约束执行手动采集。采集消息、游标和待处理数据放在 output/state/，分批导出等过程材料放在 output/work/，最终两份文档放在 output/tasks/<任务ID>/；过程、状态和附件均 Git 忽略：
 
 - 各会话独立保存上次成功位置；首次起点由用户确认，后续回溯 10 分钟并按消息 ID 去重。
 - 消息保留来源会话、消息 ID、发送者、发生时间、采集时间、链接或可定位标识。相同消息的新版本保留变更证据。
@@ -39,4 +39,4 @@ scripts/sync.py 按以下约束执行手动采集。所有采集消息、游标�
 
 JSON data.messages、has_more 与 page_token 必须符合预期；字段未知时停止，不当作空结果。原群话题回复另行完整分页。话题接口无时间过滤，仅保留授权时间内的回复；接口返回但不属于范围的回复不写入业务记录。合并转发和撤回消息单列缺口，不以普通分页成功证明其内容完整。
 
-需要按话题完整归档时读取 [records.md](records.md) 的“完整原文归档”；本次执行说明放在 output/records/tasks/<任务ID>/archive.md。
+需要按话题完整归档时读取 [records.md](records.md) 的“完整原文归档”；本次执行说明放在 output/work/<任务ID>/archive.md。

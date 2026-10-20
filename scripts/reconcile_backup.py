@@ -66,7 +66,7 @@ def run(source_name, backup_name, day):
                        'matched':sum('matched_message_id' in e for e in extracted), 'entries':extracted})
     result = {'source':source_name,'backup':backup_name,'day':day,'batches':batches,
               'note':'转发不提供原消息 ID；匹配是文本核对结果，不等于 ID 级一致，不自动合并或删除记录。'}
-    atomic(STATE / 'backup-reconciliation.json', result)
+    atomic(ROOT / 'output/work/backup-reconciliation.json', result)
     return {'batches':[{'id':b['wrapper_message_id'],'count':b['count'],'matched':b['matched']} for b in batches]}
 
 
