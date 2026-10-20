@@ -1,75 +1,77 @@
-# 记录与任务
+# Records and tasks
 
-所有任务、通知整理和复盘均按任务保存在 output/reports/YYYYMMDD/<任务目录>/，日常默认读整理稿。过程文件放在 output/work/，同步状态放在 output/state/；过程、状态与附件均 Git 忽略。
+Save tasks, notices, and reviews under `output/reports/YYYYMMDD/<task-directory>/`. Start daily reading with the summary. Working files go in `output/work/`, state in `output/state/`. The project ignores all output; the independent local report repository excludes attachments.
 
-## 分类与关联
+Read `report_language` from `config/sources.local.json`: default `zh`; supported values `zh` and `en`. Use it for authored summaries, advice, headings, status labels, and new document labels. Preserve original messages, quotations, names, and source titles. Existing documents and filenames are not translated or renamed automatically. Template labels illustrate meaning and must be rendered in the configured language.
 
-- 指定沟通：保留来源，跨会话围绕同一事项关联，不因会话不同重复建任务。
-- 公司通知：记录发布者、适用范围、生效时间、要求与相关事项；未明确适用于用户时标记待确认。
-- 任务进展：区分提交、收到、审核、确认、最终交付，不把其中一步直接写成全部完成。
-- 探索与补充：想法、尝试、问题先记录为探索；分析建议不自动转成正式要求。
+## Classification and relationships
 
-已有事项标识保留，用于关联证据和状态，不用作目录名。单写入者维护，出现并发冲突先核对；目录移动不改变事项身份。
+- Specified communication: preserve sources and connect evidence about the same item across conversations without duplicating tasks.
+- Company notices: record author, applicability, effective date, requirements, and related items. Mark applicability as unconfirmed when unclear.
+- Task progress: distinguish submission, receipt, review, confirmation, and final delivery. One intermediate step does not prove completion.
+- Exploration: record ideas, experiments, and questions as exploration. Analysis and suggestions do not become formal requirements automatically.
 
-整理稿中的当前口径与任务状态是日常维护入口，原稿提供证据；不同时维护另一份独立任务账本。根 LOG 只记录不含具体业务内容的维护或运行日志，不写会话、业务范围、结论或具体任务入口；事项内 LOG 保留具体变化。
+Preserve existing stable item identifiers for evidence and state relationships, not directory names. Use one writer; resolve concurrent conflicts first. Moving a directory does not change item identity.
 
-## 状态与证据
+The summary's current understanding and task states are the daily maintenance entry point; the transcript supplies evidence. Do not maintain a separate competing task ledger. Root LOG entries contain only maintenance or execution changes without conversations, business scope, conclusions, or result links. Item-level logs retain concrete changes.
 
-任务状态：待行动、待回复、等别人、待确认、已完成、已取消。探索和通知不强制套用任务状态。
+## States and evidence
 
-任务保存：稳定 ID、事项、状态、责任人、首次发现时间、最后证据、来源消息 ID 与链接、期限、建议下一步。无明确期限写“无明确期限”；责任人不明写“待确认”，不默认归给用户。
+Task states: action needed, reply needed, waiting on others, confirmation needed, completed, canceled. Notices and exploration need not use task states. In Chinese reports use 待行动、待回复、等别人、待确认、已完成、已取消.
 
-- 不因对方最后发言就判定需要回复；“好的”“收到”不等于完成。
-- 只有明确完成证据或用户确认才能关闭。记录不完整时写“未见明确回复／需确认”，不直接认定漏回。
-- 已完成、已取消事项保留，不因旧消息、转发或重复导入重新打开。新的矛盾证据先标记待核对，保持原关闭状态，等用户确认。
-- 用户取消的事项不再提醒或执行；长期未提及不代表取消或完成。
-- 久远且不确定的事项标注证据时间和不确定性，不冒充紧急任务。
-- 正式要求、用户反馈和分析建议分别记录。用户更正优先更新当前理解，保留此前口径和更正依据。
-- 新要求替代旧要求时，记录变更时间、来源和影响；不要抹掉原要求。
+Keep a stable ID, item, state, owner, first discovery time, latest evidence, source message IDs and links, deadline, and suggested next step. If absent, explicitly label the deadline as unspecified and owner as unconfirmed, in the report language. Never default ownership to the user.
 
-## LOG 写法
+- The last speaker does not determine who owes a reply. Acknowledgment does not prove completion.
+- Close an item only with explicit completion evidence or user confirmation. With incomplete records, say no explicit reply was observed or confirmation is needed; do not accuse the user of missing a reply.
+- Keep completed and canceled items closed when old, forwarded, or duplicate messages reappear. Mark conflicting new evidence for review while preserving the closed state until confirmed.
+- Do not execute or remind about user-canceled items. Silence or age does not imply cancellation or completion.
+- Label old, uncertain items with evidence dates and uncertainty; do not present them as urgent.
+- Separate formal requirements, user feedback, and analysis. Apply user corrections to the current understanding while preserving earlier wording and correction evidence.
+- When new requirements replace old ones, record when, from whom, and with what impact. Do not erase the old requirement.
 
-时间采用 `YYYY-MM-DD HH:mm +08:00`。每条一个主题，通常 2—4 个短条目，只写有内容的字段，不填空话。
+## LOG entries
+
+Use `YYYY-MM-DD HH:mm +08:00`. Each entry covers one change, usually with 2–4 short bullets containing only meaningful fields. Write item-level entries in the report language; maintain the project-level LOG as generic maintenance history.
 
 ```markdown
-## YYYY-MM-DD HH:mm +08:00 — 事项变化
+## YYYY-MM-DD HH:mm +08:00 — Item change
 
-- 变化：发生了什么，已有何种证据。
-- 确认／待确认：当前口径与缺口。
-- 下一步：建议用户做什么；没有则省略。
-- 来源：消息链接或标识；关联事项文件。
+- Change: what happened and the evidence.
+- Confirmed / unresolved: current understanding and gaps.
+- Next step: suggested user action; omit when unnecessary.
+- Source: message reference and related item file.
 ```
 
-根 LOG 不记录具体任务内容或成果入口，也不复制聊天和任务清单。正文保留足够背景；引用只取必要内容，明确发送者和时间，不把转述当作直接承诺。
+Keep task content and result links out of the root LOG; do not copy chats or entire task lists into it. Provide sufficient context in the report. Cite only necessary excerpts with speaker and time; do not present hearsay as a direct commitment.
 
-## 目录命名
+## Directory naming
 
-外层使用创建日期 `YYYYMMDD`，同一天创建的任务放在同一日期目录。子目录格式：
+The outer `YYYYMMDD` is the creation date. Tasks created on the same day share that directory. Subdirectories use:
 
-- 主题整理：`NN-topic-MMDD_HHmm-MMDD_HHmm-主题-来源/`，标明消息起止时间。
-- 持续监听：`NN-watch-MMDD_HHmm-主题-来源/`，只标消息起始时间。
+- Topic summary: `NN-topic-MMDD_HHmm-MMDD_HHmm-topic-source/`, with message start and end times.
+- Ongoing monitoring: `NN-watch-MMDD_HHmm-topic-source/`, with message start time only.
 
-NN 是当天跨类型共用的两位创建顺序号，依次追加，不重排。时间均为北京时间，范围分隔符使用 `-`。来源使用实际群名或私聊名。watch 后续更新保留最初的日期目录与子目录名，最新覆盖时间写入文档；目录类型不构成启用监听或配置订阅的授权。过程材料放入同名的 `output/work/YYYYMMDD/<任务目录>/`。
+NN is a two-digit daily creation sequence shared across both types; append without renumbering. Use UTC+8 and `-` as the range separator. Keep actual group or private-chat names. Ongoing updates keep the original date and directory; record latest coverage inside the documents. The directory type does not authorize monitoring or subscription setup. Mirror task working files under `output/work/YYYYMMDD/<task-directory>/`.
 
-## 两份文档
+## Two documents
 
-文件名采用 `YYYYMMDD-来源或具体主题-文档类型.md`，日期为整理日期；正文说明消息覆盖范围。每个任务对外只提供以下内容，不要求用户阅读内部索引：
+Filenames contain preparation date `YYYYMMDD`, source or specific topic, and document type. State the message coverage in the document. Default Chinese examples are below; use the configured language for new authored labels while preserving source names and existing filenames.
 
-- `YYYYMMDD-来源或主题-整理稿.md`：必要背景、当前口径、关键变化、待确认和下一步。各话题独立说明，使用“日期＋姓名”的短来源链接；不展示 CLI 字段、长 URL、采集统计或过程说明。
-- `YYYYMMDD-来源或主题-原文归档.md`：按时间顺序保留本次范围内消息，每条仅出现一次，标记说话人、时间和回复关联。完整正文不改写；跨话题引用同一原消息，不重复复制。内部 ID 可用作不可见锚点，不在正文展示。
-- `attachments/`：原附件只保存一份并引用，不将全文再次塞进文档；附件 Git 忽略。
+- `YYYYMMDD-来源或主题-整理稿.md`: necessary background, current understanding, key changes, unresolved questions, and next steps. Explain topics separately, with short date-and-speaker links. Omit CLI fields, long URLs, collection statistics, and internal process details.
+- `YYYYMMDD-来源或主题-原文归档.md`: chronological messages from the range, each once, with speaker, timestamp, and reply relationships. Preserve full original bodies. Reference the same message across topics without copying it repeatedly. Internal IDs may be hidden anchors, not visible fields.
+- `attachments/`: save each original attachment once and link to it; do not repeat its full contents. Exclude attachments from Git.
 
-范围和影响理解的完整性限制集中说明一次。原文用于查证，整理稿用于日常工作；后续优先更新整理稿和增量原文，不每轮重读、重写全量材料。
+Explain scope and material completeness limitations once. Use the transcript for verification and the summary for daily work. Update summaries and incremental originals instead of rereading or rewriting all accumulated material every run.
 
-## 执行流程
+## Execution
 
-1. 本次需求、范围和详细过程记录在 output/work/YYYYMMDD/<任务目录>/，不加入 README、skill 或通用规则。
-2. 用 scripts/sync.py 对指定来源增量采集，完整分页、去重并保存同步位置。每批最多 100 条阅读，分批材料位于 output/work/sources/。
-3. 有备份时按需核对，使用 scripts/reconcile_backup.py。转发时间不等于原消息时间；未返回原 ID 时只说明文本核对，不冒充 ID 级一致。
-4. 基于完整上下文整理各话题，保留关键变更与不确定性。按话题写作不等于按话题重复复制消息。原群不可读、撤回或附件缺失时据实说明，不擅自替代来源。
-5. 将已审阅索引与整理稿草稿保存到 output/work/YYYYMMDD/<任务目录>/，由 scripts/build_document.py 生成任务目录下的两份最终文档。已有原文和附件直接复用；不要为每次任务重新开发通用采集功能。
-6. 只检查本轮范围覆盖、原文保留、关联和文件链接；无新增问题不重复全量校验。不因简化显示而删除原始数据或关闭未完成任务。
+1. Keep the task request, scope, and process in `output/work/YYYYMMDD/<task-directory>/`, not README, skill, or reusable rules.
+2. Collect authorized sources incrementally with `scripts/sync.py`, complete pagination, deduplicate, and save cursors. Read batches of at most 100 messages from `output/work/sources/`.
+3. Compare forwarded backups only when useful, using `scripts/reconcile_backup.py`. Forward time differs from original message time. Without original IDs, describe text comparison rather than claiming ID-level equivalence.
+4. Organize topics from full context and preserve changes and uncertainties. Topic organization does not require repeating original messages. State inaccessible sources, recalls, or missing attachments; do not silently substitute sources.
+5. Prepare the reviewed index and summary draft in the configured report language under the task working directory. `scripts/build_document.py` saves the transcript and summary in the report directory. It localizes transcript labels but copies the draft without translating it. Reuse originals and attachments; do not rebuild collection infrastructure per task.
+6. Check coverage, original preservation, relationships, and links. Do not repeat full validation without a new concern. Simplification must not delete evidence or close unfinished items.
 
-内部索引仅供脚本读取：chats、start/end、topics、excluded 用于审阅校验；output 和 summary_output 指定同一任务目录的原稿及整理稿；reading_draft 指向已完成的整理稿草稿；resource_index 可选，指向资源索引。索引由 AI 维护，用户仅填写本地来源配置。
+The AI-maintained index uses chats, start/end, topics, and excluded for review validation. output and summary_output name two distinct files in the same report directory; reading_draft points to the reviewed summary; resource_index optionally locates attachments. Language comes from the local config, not an additional manifest override. The user only maintains the simple local configuration.
 
-内部版本、待处理指纹和采集证据保存在本地，不进入最终正文。未保存整理结果、或分析期间出现新版本时，不清理相应 pending。
+Keep internal versions, pending fingerprints, and collection evidence local and out of the final narrative. Do not clear pending messages before saving analysis or when a message changed during analysis.

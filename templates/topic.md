@@ -1,34 +1,35 @@
-# <事项名称>
+<!-- Render headings and labels in report_language from config/sources.local.json (default zh). Preserve original quotations and names. -->
+# <Item title>
 
-- ID：
-- 类型：任务／探索／通知
-- 首次发现：
-- 最近更新：
+- ID:
+- Type: task / exploration / notice
+- First observed:
+- Last updated:
 
-## 背景
+## Background
 
-记录事情的起因、目标与必要前情，区分直接证据和转述。
+State the origin, goal, and necessary context. Distinguish direct evidence from secondhand statements.
 
-## 当前口径
+## Current understanding
 
-- 已确认：
-- 待确认：
-- 影响范围：
-- 来源：日期与姓名的短链接，指向原稿对应消息。内部标识不在正文展开。
+- Confirmed:
+- Unresolved:
+- Affected scope:
+- Sources: short date-and-speaker links to original messages; do not display internal identifiers.
 
-## 任务进度
+## Task progress
 
-仅任务保留本节；通知改为适用范围、生效时间和相关要求，探索保留问题与结论。
+Keep this section for tasks only. For notices, describe applicability, effective dates, and requirements; for exploration, preserve questions and conclusions.
 
-- 状态：
-- 责任人：待确认
-- 期限：无明确期限
-- 建议下一步：
+- State:
+- Owner: unconfirmed
+- Deadline: unspecified
+- Suggested next step:
 
-## 相关事项
+## Related items
 
-有实际关联时填写事项链接，没有则省略本节。
+Link real relationships; omit this section if none exist.
 
 ## LOG
 
-按 rules/records.md 追加变化、确认缺口、下一步与来源；历史口径不覆盖删除。
+Follow rules/records.md for changes, confirmation gaps, next steps, and sources. Preserve historical understanding.

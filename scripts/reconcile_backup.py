@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# 用途：将已采集的合并转发备份拆为逐条证据，并与原群核对；不调用飞书。
-# 用法：python3 scripts/reconcile_backup.py --source '配置中的群名' --backup '配置中的同事姓名' --day 2026-10-20
-# 无原消息 ID 的转发只记录时间、发送者与内容核对结果，不删除原记录、不恢复撤回内容。
+# Purpose: expand collected merged-forward backups into message evidence and compare with the source chat; no Lark calls.
+# Usage: python3 scripts/reconcile_backup.py --source 'Configured group name' --backup 'Configured colleague name' --day 2026-10-20
+# Without original message IDs, compare time, sender, and text only; never delete originals or claim to recover recalled content.
 
 import argparse
 from collections import defaultdict

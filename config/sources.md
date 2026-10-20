@@ -1,34 +1,37 @@
-# 采集配置
+# Collection configuration
 
-真实配置使用 `config/sources.local.json`，已 Git 忽略。可追踪的 [sources.example.json](sources.example.json) 仅展示格式，不参与运行，示例日期和名称不构成授权。
+Use `config/sources.local.json` for real configuration. It is Git-ignored. The tracked [example](sources.example.json) documents the format only; its dates and names do not authorize collection and are never used at runtime.
 
-## 只需填写两项
+## Fields
 
-- `since`：首次采集起始日期，格式 YYYY-MM-DD，按北京时间当天 00:00 起算。后续按各会话已保存的同步进度继续，不因修改此字段自动重置历史进度。
-- `chats`：群聊名称或同事姓名的字符串数组。列入即指定采集来源；移除后停止该来源的后续采集，已有记录保留。
+- `since` (required): initial collection date, `YYYY-MM-DD`, starting at 00:00 UTC+8. Later runs use the saved per-chat cursor; changing this field does not reset prior collection history.
+- `chats` (required): an array of group names or colleague names. Only listed sources may be collected. Removing a source stops future collection while preserving existing records.
+- `report_language` (optional): `zh` for Chinese or `en` for English. Default: `zh` when omitted. Other values, including empty or null, are invalid and stop execution.
 
-运行前读取用户维护的本地配置，以实际日期和聊天列表为准。JSON 无效、日期未填写或无效、聊天名称为空白时停止采集；列表为空时不调用飞书。不回退到示例配置，不猜测日期或来源。
+Read the user-maintained local JSON before running. Invalid JSON, missing or invalid dates, and blank names stop collection. An empty chat list makes no Lark calls. Do not fall back to example values or guess dates and sources.
 
-用途与分析要求写在 Markdown 规则中，不要求用户维护 ID、类型、版本、启用开关或确认备注。运行时段和执行方式仍需另行确认。
+The report setting controls AI-authored summaries, advice, headings, and new document labels. The builder localizes transcript labels and explanatory text; it copies the reviewed summary draft without translation. Original messages, quotations, names, and source titles remain in their source language. Changing the setting does not automatically translate old reports or rename existing files. The author prepares new titles and drafts in the configured language; a previously prepared draft needs explicit revision before rebuilding in another language.
 
-## 名称定位
+Purpose and analysis requirements belong in Markdown rules. Users do not maintain IDs, types, versions, enable flags, or confirmation metadata. Scheduling and execution policy require separate confirmation.
 
-允许仅为定位 chats 中填写的名称，查询匹配的群聊或联系人基本信息，不读取其他聊天内容，不全量枚举会话或通讯录。
+## Name resolution
 
-唯一且明确匹配时保存对应关系；有重名、群聊与联系人同名或只有模糊匹配时，先向用户列出必要的候选识别信息，确认前不读取该来源消息。未找到时报告缺口，不扩大范围、不创建会话。
+Look up only the basic group or contact information needed to resolve names in `chats`. Do not read other conversations or enumerate all chats or contacts.
 
-工具负责将名称与实际会话 ID 的对应关系保存在 `output/state/chat-map.json`，后续按对应关系读取。联系人标识不等于会话 ID，必须通过只读方式核实，不能通过发送消息或创建聊天来取得 ID。只读接口无法定位时停止并告知用户。
+Save unique, explicit matches. For duplicate names, group/contact collisions, or fuzzy matches, show the minimum identifying information and wait for user confirmation before reading that source. If not found, report the gap without broadening the search or creating a conversation.
 
-映射失效或名称变更导致对应关系不明确时重新核对，不自动改绑另一会话。即使旧映射仍存在，移出 chats 的来源也不得继续采集。
+Store resolved chat IDs in `output/state/chat-map.json`. A contact identifier is not a chat ID; verify through read-only methods. Never send a message or create a chat to obtain an ID. If read-only lookup cannot resolve it, stop and explain.
 
-## 其他边界
+Recheck invalid or ambiguous mappings after name changes; do not automatically bind to another conversation. Old mappings never authorize collection of sources removed from `chats`.
 
-- “公司通知”也必须来自指定名称，不表示读取全公司会话。
-- 附件默认仅保存引用；内容读取须属于授权范围且与事项相关。
-- 时区 UTC+8；运行频率、允许时段、工作日与节假日策略尚未确认。
-- 无新消息时的明确期限提醒尚未确认，当前不启用。
-- 不沿用参考提示词中的真实会话、个人身份、起始日期、运行时间或历史任务状态。
+## Other boundaries
 
-真实配置不复制进 LOG、示例或规则文件。输出统一位于 output/；work/、state/ 和任务附件 Git 忽略，最终两份文档保留追踪。
+- Company notices must also come from specified sources, not all company conversations.
+- Attachments default to references. Read contents only when relevant and within the authorized scope.
+- Timezone remains UTC+8. Frequency, allowed hours, working-day and holiday policies are not configured.
+- Deadline reminders without new messages are not enabled.
+- Do not adopt real sources, identities, dates, schedules, or historical task states from reference prompts.
 
-名称解析与手动采集入口见 scripts/sync.py；仅在实际成功读取且分页完整时记录覆盖范围。定时调度尚未配置。
+Never copy real configuration into LOG, examples, or rules. The project ignores all `output/`; reports may be versioned in their independent local repository, which excludes attachments. Working files and state stay outside that repository.
+
+Use `scripts/sync.py` for name resolution and manual collection. Record coverage only after actual successful reading and complete pagination. No scheduler is configured.

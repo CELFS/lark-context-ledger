@@ -1,17 +1,18 @@
-# <日期与沟通主题>
+<!-- Render headings and labels in report_language from config/sources.local.json (default zh). Preserve original quotations and names. -->
+# <Date and communication topic>
 
-## 观察事实
+## Observations
 
-具体表达、发生时间与来源；缺少上下文的地方明确说明。
+Specific wording, times, and sources. State where context is missing.
 
-## 可能的口径缺口
+## Possible alignment gaps
 
-分别说明已有证据和分析推断，不推断个人动机。
+Separate evidence from inference; do not infer personal motives.
 
-## 建议
+## Suggestions
 
-最小澄清动作或供用户自行采用的措辞。不得代发消息。
+Offer minimal clarification actions or wording for the user to adopt. Never send messages.
 
-## 用户反馈与后续结果
+## User feedback and outcomes
 
-获得反馈后再记录；没有证据时不预填结果，不自动形成长期个人规则。
+Record only after feedback or outcome evidence exists. Do not prefill results or automatically establish lasting personal rules.

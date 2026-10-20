@@ -1,25 +1,25 @@
-# 沟通对齐与个人回顾
+# Communication alignment and personal review
 
-目标是帮助用户提前澄清误解，减少反复确认与追责。分析依据是具体对话和上下文，不是对人的定性。
+Help the user clarify misunderstandings early and reduce repeated confirmation and blame. Base analysis on specific conversations and context, not judgments about people. Write the review and suggestions in report_language (default zh); retain quotations verbatim.
 
-## 检查重点
+## Review focus
 
-- 目标与范围：双方讨论的是否是同一个交付物，是否存在未说出的前提。
-- 责任与时间：谁需要行动、等待谁、何时交付是否被明确接受。
-- 验收与状态：“可以”“完成”“确认”分别指什么阶段，标准是否一致。
-- 变更与影响：要求是否变化，相关人是否已确认；不能因为发过消息就认定已达成共识。
-- 沟通效率：重复讨论是否源于缺少背景或结论；不以消息数量或回复速度单独判断效率。
-- 表达与态度：指出具体措辞可能造成的理解及其他可能解释，不推断动机、人格或恶意，不打分排名。
-- 用户自身表达：是否交代背景、明确请求、区分事实与推测、说明期望对方确认的内容。
+- Goals and scope: whether participants mean the same deliverable and whether assumptions are unstated.
+- Responsibility and timing: whether actions, dependencies, and delivery times were explicitly accepted.
+- Acceptance and state: what approval, completion, and confirmation mean at each stage, and whether standards align.
+- Changes and impact: whether requirements changed and affected people confirmed them. Sending a message alone does not establish agreement.
+- Efficiency: whether repetition comes from missing context or conclusions. Message volume and reply speed alone do not determine efficiency.
+- Wording and attitude: explain specific wording, possible interpretations, and alternatives. Do not infer motives, personality, or malice, or score and rank people.
+- The user's own wording: whether it supplies context, makes a clear request, distinguishes facts from hypotheses, and specifies what needs confirmation.
 
-## 建议写法
+## Suggestions
 
-先说明事实与来源，再说明可能的理解差异，最后给最小可执行建议。证据不足就说明不足，不为了输出建议制造冲突。
+Present observations and sources, then possible differences in understanding, then the smallest useful action. Acknowledge insufficient evidence; do not invent conflict to produce advice.
 
-可提供用户自行发送的建议措辞，但绝不代发。示例的事项、时间和承诺必须来自证据，不能为使措辞完整而编造。
+Suggested wording may be offered for the user to send, but never sent by AI. Details, times, and commitments must come from evidence, not be invented to make a draft sound complete.
 
-涉及私聊形成的背景可以用于用户个人理解；建议对外表述时不默认披露私聊原文或他人私下意见。
+Private-chat context may inform the user's personal understanding. Suggested external wording must not assume permission to disclose private quotations or others' private opinions.
 
-一次案例不足以形成稳定结论。反复出现的问题记录对应案例，经用户确认后才沉淀为个人长期偏好或规则。
+One incident does not establish a stable pattern. Record supporting cases for recurring issues; turn them into lasting personal preferences or rules only after user confirmation.
 
-回顾区分：观察事实、可能风险、建议措辞／方法、用户反馈、后续结果。没有结果时不声称建议有效。
+Distinguish observations, possible risks, suggested wording or methods, user feedback, and later outcomes. Without outcomes, do not claim advice was effective.

@@ -61,3 +61,9 @@
 - 变化：项目与本地技能统一命名为 lark-context-ledger，成果目录改为 output/reports/，同步更新文档与内部索引引用。
 - 保存：项目仓库忽略整个 output/，报告目录预留独立本地版本管理并忽略附件；由用户手动初始化和提交。
 - 验证：报告与附件内容保留，未执行 Git 修改操作。
+
+## 2026-10-20 — English instructions and configurable report language
+
+- Change: maintain reusable instructions and code comments in English and add a Chinese README. Reports default to zh; local JSON may select zh or en.
+- Behavior: localize transcript labels and author summaries in the configured language; preserve source messages, historical reports, and existing filenames.
+- Boundary: local changes only; no Lark calls or Git mutations.

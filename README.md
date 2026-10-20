@@ -1,48 +1,52 @@
 # lark-context-ledger
 
-基于 Lark CLI 采集工作沟通，整理任务与背景，回顾沟通方式，提前发现口径缺口。飞书严格只读，AI 不发送消息、不修改业务数据。
+English | [简体中文](README.zh-CN.md)
 
-## 日常使用
+A personal work context ledger built on Lark CLI. Collect communication, preserve context, track local task progress, and review communication to identify alignment gaps early. Lark and Feishu access is strictly read-only: AI never sends messages or modifies remote business data.
 
-在本地配置填写起始日期与聊天名称，然后在对话中提出需求，例如“整理指定群最近的讨论”“更新任务进展”“回顾这段沟通”。
+## Everyday use
 
-每个任务只需看两份文档：
+Set a start date and chat names in `config/sources.local.json`, then ask for a topic summary, progress update, or communication review. Names are resolved internally; ambiguous matches require confirmation.
+
+Each task provides two documents:
 
 ```text
 output/
   reports/YYYYMMDD/
-    NN-topic-MMDD_HHmm-MMDD_HHmm-主题-来源/
-      YYYYMMDD-主题-整理稿.md      日常阅读：背景、结论、变化和待办
-      YYYYMMDD-主题-原文归档.md    查证：说话人、时间、正文和回复关联
-      attachments/               原附件，本地保留，Git 忽略
-    NN-watch-MMDD_HHmm-主题-来源/  持续监听，仅标起始时间；文档结构同上
-  work/                过程材料，Git 忽略
-  state/               同步状态，Git 忽略
+    NN-topic-MMDD_HHmm-MMDD_HHmm-topic-source/
+      YYYYMMDD-主题-整理稿.md       Daily reading: background, conclusions, changes, next steps
+      YYYYMMDD-主题-原文归档.md     Evidence: speakers, timestamps, messages, reply relationships
+      attachments/                Local only, excluded from the report repository
+    NN-watch-MMDD_HHmm-topic-source/  Ongoing monitoring, start time only; same document layout
+  work/                           Working materials, ignored by the project repository
+  state/                          Collection state, ignored by the project repository
 ```
 
-目录按创建日期归档，NN 为当天创建顺序，依次追加且不重排。`topic` 表示主题整理，包含消息起止时间；`watch` 表示持续监听，仅含消息起始时间，后续更新沿用原目录，最新覆盖时间写在正文中。目录时间统一使用北京时间。命名为 watch 不代表已经启用监听。过程材料按相同日期和任务目录放入 `output/work/`。
+The outer date is the creation date. NN is a shared daily sequence across both types; append without renumbering. `topic` includes message start and end times; `watch` includes only the start time. Ongoing updates keep the original directory and record the latest coverage inside the documents. All times use UTC+8. Naming a directory `watch` does not activate monitoring. Task working materials mirror the date and directory name under `output/work/`.
 
-文件名使用整理日期（YYYYMMDD）、来源或具体主题、文档类型，避免只用“整理稿”或“原文归档”。正文保留覆盖的消息时间范围。原文每条只保存一次，附件不重复嵌入全文。后续默认先读整理稿，再按需追溯原文；已有资料复用，增量更新。
+Filenames include the preparation date, source or specific topic, and document type. The examples show the default Chinese naming; use the configured report language for new document labels. Preserve actual source names. Existing filenames remain unchanged. Keep each original message once, link attachments without repeating their full contents, and read the summary first. Reuse collected data and update incrementally.
 
-README 仅说明用途与用法；具体需求和结果全部在 output/。根 LOG.md 只记录不含具体业务内容的维护或运行日志。
+README files describe the project and usage only. Task-specific requests and results belong in `output/`. The root `LOG.md` records maintenance or execution changes without business content.
 
-项目仓库忽略整个 `output/`。`output/reports/` 用于独立的本地 Git 仓库，保存报告版本；附件由其内部 `.gitignore` 忽略，过程材料和同步状态不纳入报告仓库。独立仓库由用户手动初始化和提交，不配置远程地址。
+The project repository ignores all of `output/`. The user may initialize `output/reports/` as a separate local Git repository to keep report history, without configuring a remote. Its own `.gitignore` excludes attachments. Working materials and collection state are outside the report repository. Git initialization and commits are performed by the user.
 
-## 配置与命令
+## Configuration and commands
 
-真实配置使用 `config/sources.local.json`，已 Git 忽略；格式见 [配置说明](config/sources.md) 和 [示例](config/sources.example.json)。只需填写 since 与 chats，名称定位由工具处理，重名先确认。
+The real configuration is `config/sources.local.json`, excluded from Git. See [configuration](config/sources.md) and the [example](config/sources.example.json). Required fields: `since` and `chats`. Optional: `report_language`, default `zh`; supported values are `zh` and `en`. Examples are never used as runtime configuration or authorization.
 
-以下命令在仓库根目录执行，使用 Python 标准库和已授权的飞书 CLI：
+AI writes summaries, advice, and new report titles in the configured report language. The document builder switches transcript labels and explanatory text. Original messages, quotations, names, and source titles remain unchanged. Changing the setting does not translate existing reports or rename files. Repository instructions are maintained in English; reports still default to Chinese.
+
+Run these commands from the repository root using Python's standard library and an authorized Lark CLI:
 
 ```bash
 python3 scripts/sync.py status
-python3 scripts/sync.py collect --chat '配置中的名称'
-python3 scripts/sync.py export --chat '配置中的名称'
-python3 scripts/build_document.py 'output/work/YYYYMMDD/任务目录/topic-index.json'
+python3 scripts/sync.py collect --chat 'Configured chat name'
+python3 scripts/sync.py export --chat 'Configured chat name'
+python3 scripts/build_document.py 'output/work/YYYYMMDD/task-directory/topic-index.json'
 ```
 
-名称定位使用 sync.py resolve，备份核对使用 reconcile_backup.py --source '群名' --backup '姓名' --day YYYY-MM-DD。未启用定时运行；脚本负责采集与保存，AI 负责理解和整理。
+Use `sync.py resolve` to resolve names. Compare a forwarded backup with `reconcile_backup.py --source 'Group name' --backup 'Person name' --day YYYY-MM-DD`. Scripts collect and save data; AI reads the evidence and prepares the summary. No scheduled execution or continuous listener is enabled.
 
-## 规则入口
+## Rules
 
-[总边界](AGENTS.md) · [本地技能](.agents/skills/lark-context-ledger/SKILL.md) · [采集规则](rules/sync.md) · [记录规则](rules/records.md) · [沟通回顾](rules/communication.md) · [日志](LOG.md)
+[Boundaries](AGENTS.md) · [Local skill](.agents/skills/lark-context-ledger/SKILL.md) · [Collection](rules/sync.md) · [Records](rules/records.md) · [Communication review](rules/communication.md) · [Maintenance log](LOG.md)

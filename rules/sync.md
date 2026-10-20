@@ -1,42 +1,42 @@
-# 采集与监听
+# Collection and monitoring
 
-## 调用前
+## Before calling Lark
 
-读取 AGENTS.md、config/sources.md 与 config/sources.local.json。真实来源只从本地 JSON 读取，不回退到示例配置；配置缺失或无效时停止采集。仅允许已确认来源、时间范围内的只读查询。核实具体命令的作用；禁止发送、写入和更改远端配置。监听方式尚未选定，不自动注册事件订阅或启动常驻进程。
+Read AGENTS.md, config/sources.md, and config/sources.local.json. Real sources come only from the local JSON; missing or invalid configuration stops collection without using examples. Permit read-only queries only within confirmed sources and time ranges. Verify command effects: sending, remote writes, and remote configuration changes are forbidden. No listening method is selected; do not register subscriptions or start a persistent process automatically.
 
-如未来采用时段限制，每次请求、分页及重试前均检查。被策略跳过不等于同步成功，不推进游标，也不改变任务完成状态。若确认采用中国工作日策略，日历依据国务院正式通知；缺失且无法核实时停止采集并提示一次，不擅自按普通周一至周五替代。
+If time restrictions are adopted later, check them before every request, page, and retry. A policy skip is not a successful sync; advance no cursors and change no completion states. If Chinese working-day rules are confirmed, use official State Council notices. If the calendar is missing and cannot be verified, stop collection and notify once instead of substituting weekdays.
 
-## 来源定位
+## Source resolution
 
-用户只维护本地 JSON 的 since 和 chats。按 config/sources.md 的名称定位规则查询指定名称，唯一明确匹配后保存映射至 output/state/chat-map.json；重名或模糊匹配先等用户确认。查询只涉及定位必要的基本信息，不读取未指定会话的消息，不执行任何远端写入。
+The user maintains since and chats, with optional report_language. Follow config/sources.md to resolve configured names. Save unique, explicit matches in output/state/chat-map.json; wait for confirmation on duplicates or fuzzy matches. Query only necessary identifying information, not messages from unspecified sources, and perform no remote writes.
 
-每轮以当前 chats 限定来源，旧映射不能扩大采集范围。首次采集从 since 对应的北京时间 00:00 开始，后续使用会话同步进度。
+Every run is limited by the current chats list. Old mappings never expand scope. Initial collection starts at since, 00:00 UTC+8; later runs use the saved cursor.
 
-## 增量与恢复约束
+## Incremental collection and recovery
 
-scripts/sync.py 按以下约束执行手动采集。采集消息、游标和待处理数据放在 output/state/，分批导出等过程材料放在 output/work/，最终两份文档放在 output/reports/YYYYMMDD/<任务目录>/；过程、状态和附件均 Git 忽略：
+scripts/sync.py performs manual collection under these constraints. Messages, cursors, and pending state live in output/state/; batches and working material in output/work/; final documents in output/reports/YYYYMMDD/<task-directory>/. The project ignores all output; the local report repository excludes attachments.
 
-- 各会话独立保存上次成功位置；首次起点由用户确认，后续回溯 10 分钟并按消息 ID 去重。
-- 消息保留来源会话、消息 ID、发送者、发生时间、采集时间、链接或可定位标识。相同消息的新版本保留变更证据。
-- 回溯窗口不能保证发现更早消息的编辑或删除；未覆盖的变更不能声称已同步。
-- 完整分页且消息成功保存后，才能推进对应会话的采集位置。单一会话失败不能冒充所有来源成功。
-- 已采集但未分析的内容保留为待处理；按会话分批，每批最多 100 条。长消息分段，未分析部分继续保留。
-- 采集游标与分析进度分开保存；只有相关记录成功落盘后，才能移除已分析且版本未变化的待处理消息。
-- 保存采用临时文件写入后原子替换；临时文件位于目标数据目录。多文件写入不可假定整体原子，需可恢复且重复执行不生成重复记录。防止并发运行互相覆盖。
-- 失败保留旧记录和待处理数据，说明受影响来源、时间段及是否存在遗漏。恢复后在已授权范围补齐。
+- Maintain per-chat successful cursors. Confirm initial dates, then overlap later runs by 10 minutes and deduplicate by message ID.
+- Preserve source chat, message ID, speaker, message time, collection time, link or locator, and evidence of edits.
+- The overlap cannot guarantee discovery of older edits or deletions. Do not claim coverage of changes that were not checked.
+- Advance a cursor only after complete pagination and successful persistence. One source succeeding does not prove all sources succeeded.
+- Keep collected but unanalyzed content pending. Process at most 100 messages per batch per source. Split long messages and retain unread portions.
+- Keep collection and analysis progress separate. Remove analyzed pending entries only after saving related records and only if their versions remain unchanged.
+- Write temporary files in the target data directory and atomically replace each destination. Do not assume multi-file atomicity; preserve recovery and idempotency and prevent concurrent overwrites.
+- On failure, retain prior records and pending content. Explain affected sources, dates, and possible gaps. Backfill only within the authorized scope after recovery.
 
-## 读取量与输出
+## Reading volume and output
 
-优先读取本轮结果、待处理消息、相关事项当前状态和用户反馈。仅在需要核实上下文时定点读取历史，不每轮读取全部聊天或报告。
+Start with current-run results, pending messages, relevant current item states, and user feedback. Read targeted history only to verify context, not every accumulated chat or report.
 
-附件默认保存引用；链接不可获取时保留消息 ID，不编造链接。未读附件不能当作已核实证据。
+Attachments default to references. If links are unavailable, retain message IDs without inventing links. Unread attachments are not verified evidence.
 
-没有新增消息、用户反馈或状态变化时不重复分析和提醒。提醒仅在当前用户交互渠道展示，不发送到飞书，不分发给他人。
+With no new messages, feedback, or state changes, do not repeat analysis or reminders. Reminders appear only in the current user interaction channel, never in Lark or to other people. Author reports and advice using report_language (default zh); preserve source material unchanged. Collection batches and diagnostics are internal material, not final reports.
 
-## 手动执行与完整性
+## Manual execution and completeness
 
-用户在当前对话明确要求的一次采集，按指定范围执行；未配置周期运行策略时，不自动安排下一轮。脚本仅开放固定只读命令，不接受通用 API 或任意 CLI 命令。此白名单约束本脚本调用，不代表整个电脑或 CLI 的权限隔离。
+Perform each explicitly requested collection within its stated scope. Without an approved recurring policy, do not schedule another run. Scripts expose fixed read-only commands, not arbitrary APIs or CLI commands. Their allowlist constrains their own calls, not every CLI or computer permission.
 
-JSON data.messages、has_more 与 page_token 必须符合预期；字段未知时停止，不当作空结果。原群话题回复另行完整分页。话题接口无时间过滤，仅保留授权时间内的回复；接口返回但不属于范围的回复不写入业务记录。合并转发和撤回消息单列缺口，不以普通分页成功证明其内容完整。
+Validate data.messages, has_more, and page_token; unknown response shapes stop collection rather than becoming empty results. Fully paginate thread replies separately. Thread APIs lack time filtering, so retain only authorized replies and do not persist returned out-of-range replies as business records. Record merged forwards and recalled messages as separate completeness issues; ordinary pagination success does not prove their contents are complete.
 
-需要按话题完整归档时读取 [records.md](records.md) 的“两份文档”；本次执行说明放在 output/work/YYYYMMDD/<任务目录>/archive.md。
+For complete discussion archives, follow “Two documents” in [records.md](records.md). Keep execution details in output/work/YYYYMMDD/<task-directory>/archive.md.

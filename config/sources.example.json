@@ -1,4 +1,5 @@
 {
+  "report_language": "en",
   "since": "2026-10-01",
-  "chats": ["项目讨论群", "某某某"]
+  "chats": ["group1", "someone1"]
 }

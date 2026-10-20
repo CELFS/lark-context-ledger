@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# 用途：仅通过飞书 CLI 的固定只读命令定位指定聊天、分页采集并保存本地状态。
-# 用法（在仓库根目录）：
+# Purpose: resolve configured chats, paginate collection, and save local state using fixed read-only Lark CLI commands.
+# Usage (from the repository root):
 #   python3 scripts/sync.py status
-#   python3 scripts/sync.py resolve --chat '配置中的名称'
-#   python3 scripts/sync.py collect --chat '配置中的名称'
-#   python3 scripts/sync.py collect --chat '配置中的名称' --start '2026-10-20T11:00:00+08:00'
-#   python3 scripts/sync.py export --chat '配置中的名称'
-# 不发送消息，不修改飞书，不自动登录或调度；仅使用 Python 标准库。
+#   python3 scripts/sync.py resolve --chat 'Configured chat name'
+#   python3 scripts/sync.py collect --chat 'Configured chat name'
+#   python3 scripts/sync.py collect --chat 'Configured chat name' --start '2026-10-20T11:00:00+08:00'
+#   python3 scripts/sync.py export --chat 'Configured chat name'
+# No messages, remote mutations, automatic login, or scheduling; Python standard library only.
 
 import argparse
 from contextlib import contextmanager
@@ -79,7 +79,19 @@ def config():
     if len(set(data['chats'])) != len(data['chats']):
         raise ValueError('配置中有重复聊天名称。')
     parse_time(data.get('since', ''))
+    report_language(data)
     return data
+
+
+def report_language(data=None):
+    if data is None:
+        data = read(ROOT / 'config/sources.local.json', {})
+    if not isinstance(data, dict):
+        raise ValueError('本地配置须为 JSON 对象。')
+    language = data.get('report_language', 'zh')
+    if not isinstance(language, str) or language not in ('zh', 'en'):
+        raise ValueError('report_language 仅支持 zh 或 en；省略时默认 zh。')
+    return language
 
 
 def parse_time(value):
@@ -112,7 +124,7 @@ def cli(command, args):
         missing = error.get('missing_scopes', [])
         if missing and isinstance(missing, list):
             raise ValueError('缺少只读权限：' + ', '.join(str(v) for v in missing) + '；需用户完成对应授权。')
-        # 不原样打印命令输出，防止将认证信息写入报告。
+        # Do not print raw command output, which may expose authentication details in reports.
         raise ValueError('飞书只读请求失败：' + str(error.get('type', 'unknown')) + '/' +
                          str(error.get('subtype', 'unknown')) + '；请核实配置和只读权限。')
     if not isinstance(envelope.get('data'), dict):
@@ -128,7 +140,7 @@ def pages(command, args, field):
         data = response['data']
         items = data.get(field)
         pagination = response.get('meta', {}).get('pagination', {})
-        # 实际 CLI 在明确的空搜索结果中将 chats 返回为 null。
+        # The CLI returns chats as null for an explicit empty search result.
         if field in data and items is None and data.get('has_more') is False and pagination.get('complete') is True and pagination.get('items') == 0:
             items = []
         if not isinstance(items, list):
@@ -183,7 +195,7 @@ def message_time(message):
             number /= 1000
         return datetime.fromtimestamp(number, TZ)
     except (TypeError, ValueError, OverflowError, OSError):
-        # 实际 CLI 返回北京时间的分钟精度字符串，而非统一的毫秒时间戳。
+        # The CLI returns minute-precision UTC+8 strings rather than consistent millisecond timestamps.
         if isinstance(value, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}(?::\d{2})?', value):
             return datetime.fromisoformat(value).replace(tzinfo=TZ)
         return parse_time(value)
@@ -248,7 +260,7 @@ def collect(name, mapping, cfg, args):
                           if row['message'].get('thread_id')})
         thread_coverage = []
         for thread in threads:
-            # 话题接口不支持时间过滤；只保存授权时间内消息，原始响应不落盘。
+            # Thread APIs lack time filtering; save only authorized messages and do not persist the raw response.
             for _, messages in pages(('im', '+threads-messages-list'),
                                      ['--thread', thread, '--order', 'asc', '--page-size', '50', '--no-reactions'], 'messages'):
                 filtered = [m for m in messages if first <= message_time(m) <= end]
@@ -269,7 +281,7 @@ def collect(name, mapping, cfg, args):
         book['gaps'] = gaps
         book['coverage'].append({'start': start.isoformat(), 'end': end.isoformat(),
                                  'messages_paginated': True, 'threads_checked': thread_coverage})
-        # 显式补采只填补证据；不能越过既有游标与补采起点之间的未采区间。
+        # Explicit backfills add evidence without advancing across an uncollected gap after the existing cursor.
         baseline = parse_time(book['cursor']) if book['cursor'] else first
         if start <= baseline:
             book['cursor'] = max(baseline, end).isoformat()
@@ -311,7 +323,7 @@ def export(name, mapping):
             content = m.get('content', '')
             if not isinstance(content, str):
                 content = json.dumps(content, ensure_ascii=False, indent=2)
-            # 引用块保留所有行，防止外部内容改变文档章节结构。
+            # Quote every line so external content cannot change the document section structure.
             lines += ['', *['> ' + line for line in content.split('\n')], '']
         file = destination / ('batch-' + str(offset // 100 + 1).zfill(4) + '.md')
         atomic(file, '\n'.join(lines))
