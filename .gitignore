@@ -1,5 +1,5 @@
-# 真实监听来源仅保存在本地。
+# The real monitoring source is only saved locally.
 /config/sources.local.json
 
-# 报告由独立本地仓库管理；过程、状态及全部输出不进入本项目仓库。
+# Reports are managed by a separate local repository; all process, state, and output are excluded from this project repository.
 /output/
