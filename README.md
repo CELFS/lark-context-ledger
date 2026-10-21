@@ -4,6 +4,44 @@ English | [简体中文](README.zh-CN.md)
 
 A personal work context ledger built on Lark CLI. Collect communication, preserve context, track local task progress, and review communication to identify alignment gaps early. Lark and Feishu access is strictly read-only: AI never sends messages or modifies remote business data.
 
+## Quick start with Codex
+
+### 1. Prepare the local environment
+
+- Python 3.9 or later. The scripts use the standard library; the collector uses Unix file locking and expects macOS or Linux.
+- [Lark CLI](https://github.com/larksuite/cli) and its Agent Skills. Follow the official installation, application configuration, and login instructions. Make `lark-cli` available in the terminal used by Codex, with user-identity read access for the sources you intend to collect. The collection workflow uses the official `lark-shared` and `lark-im` skills; other domains are needed only for relevant material.
+- Codex with access to local files and a terminal. See the [official desktop app guide](https://developers.openai.com/codex/app/) for setup options.
+
+Complete CLI installation and authorization yourself, or explicitly authorize those setup actions. They are separate from requesting a collection run.
+
+### 2. Open this repository in Codex
+
+Open or add the local `lark-context-ledger` folder as a project, and start a chat with this repository root as the working directory. Keep the tool repository as the entry point, including when `output/reports/` has its own Git repository.
+
+The project skill is already included at [.agents/skills/lark-context-ledger/SKILL.md](.agents/skills/lark-context-ledger/SKILL.md). Codex discovers repository skills in `.agents/skills`; no separate global installation of this project skill is needed. Keep it in the repository so its relative references to rules, templates, and scripts remain valid. See [OpenAI's local skill documentation](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills). If the skill does not appear, check the project directory and restart Codex.
+
+### 3. Create your local configuration
+
+Create `config/sources.local.json` using [sources.example.json](config/sources.example.json) as a format reference. Fill in your own `since` date and `chats`, and choose `report_language` (`zh` by default, or `en`). Replace the example date and names before collecting; the example file is not loaded as runtime configuration. Field details are in the [configuration guide](config/sources.md).
+
+The real configuration and all `output/` data are ignored by this project repository. Keep credentials in Lark CLI's own authentication storage; they do not belong in this JSON.
+
+### 4. Check locally, then request collection
+
+From the repository root, inspect configuration and saved collection state:
+
+```bash
+python3 scripts/sync.py status
+```
+
+This command makes no Lark API calls and does not verify login or API permissions. Unresolved sources are expected before the first name lookup. Use the CLI's official authentication instructions to check login separately.
+
+For a first Codex message, use:
+
+> Use lark-context-ledger. Read AGENTS.md and the project skill, check my local configuration, and explain the configured sources and date range. Do not query Lark or collect messages yet.
+
+After confirming the scope, ask Codex to collect and summarize the specified source. Results are saved under `output/reports/`; schedules and continuous monitoring are not enabled by this setup.
+
 ## Everyday use
 
 Set a start date and chat names in `config/sources.local.json`, then ask for a topic summary, progress update, or communication review. Names are resolved internally; ambiguous matches require confirmation.

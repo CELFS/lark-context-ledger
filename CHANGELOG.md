@@ -98,3 +98,9 @@ Tool changes only: skills, rules, scripts, templates, and documentation. Actual 
 
 - Change: add short inline descriptions to the directory trees in both README files for easier scanning.
 - Preservation: retain language-specific filename examples and the detailed explanations below each tree.
+
+## 2026-10-21 16:36 +08:00 — Add public README onboarding
+
+- Change: document local prerequisites, official Lark CLI and Codex setup links, repository skill discovery, local configuration, and a first-use prompt in both README files.
+- Verification: distinguish the local status command from authentication checks and actual collection; keep example sources separate from runtime authorization.
+- Scope: documentation only; no dependency installation, authentication changes, collection, or publishing.

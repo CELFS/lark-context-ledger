@@ -4,6 +4,44 @@
 
 基于 Lark CLI 采集工作沟通，整理任务与背景，回顾沟通方式，提前发现口径缺口。飞书严格只读，AI 不发送消息、不修改业务数据。
 
+## 使用 Codex 快速开始
+
+### 1. 准备本地环境
+
+- Python 3.9 或更高版本。脚本使用标准库；采集器使用 Unix 文件锁，需要 macOS 或 Linux 环境。
+- [Lark CLI／飞书 CLI](https://github.com/larksuite/cli) 及其 Agent Skills。按官方说明完成安装、应用配置和登录，确保 Codex 使用的终端能找到 `lark-cli`，并以用户身份获得目标来源所需的只读权限。采集流程使用官方 `lark-shared`、`lark-im` 技能，其他业务域按相关材料需要准备。
+- 能访问本地文件和终端的 Codex。安装与使用入口见 [OpenAI 官方桌面应用说明](https://developers.openai.com/codex/app/)。
+
+CLI 安装和授权由你完成，或在明确授权后交给 AI 操作；提出采集需求不等于授权安装、登录或修改应用配置。
+
+### 2. 在 Codex 中打开本项目
+
+将本地 `lark-context-ledger` 文件夹打开或添加为项目，以这个仓库根目录作为对话工作目录。即使 `output/reports/` 已有独立 Git 仓库，也从工具仓库进入使用流程。
+
+项目已包含 [.agents/skills/lark-context-ledger/SKILL.md](.agents/skills/lark-context-ledger/SKILL.md)。Codex 会发现仓库内 `.agents/skills` 中的技能，无需额外全局安装本项目 skill。保持其在仓库中的位置，以便相对路径能找到规则、模板和脚本。机制见 [OpenAI 本地 skill 文档](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills)。如果未显示该技能，先检查项目目录，再重启 Codex。
+
+### 3. 创建本地配置
+
+以 [sources.example.json](config/sources.example.json) 为格式参考，创建 `config/sources.local.json`，填写自己的起始日期 `since`、来源名称 `chats`，并选择报告语言 `report_language`（默认 `zh`，也可选 `en`）。采集前替换示例日期和名称；示例文件不会作为运行配置读取。字段说明见[配置文档](config/sources.md)。
+
+真实配置和整个 `output/` 均由本项目仓库忽略。凭据由飞书 CLI 自身的认证存储管理，不写入该 JSON。
+
+### 4. 先本地检查，再提出采集需求
+
+在仓库根目录检查配置及已保存的采集状态：
+
+```bash
+python3 scripts/sync.py status
+```
+
+该命令不调用飞书 API，也不验证登录状态或接口权限。首次定位来源前，显示尚未解析是正常情况；登录检查另按 CLI 官方认证说明操作。
+
+第一次向 Codex 提问，可以直接使用：
+
+> 使用 lark-context-ledger。读取 AGENTS.md 和项目 skill，检查我的本地配置，说明已配置的来源与日期范围，暂不查询飞书或采集消息。
+
+确认范围后，再要求 Codex 采集和整理指定来源。结果保存在 `output/reports/`；上述接入步骤不会启用定时任务或持续监听。
+
 ## 日常使用
 
 在本地配置填写起始日期与聊天名称，然后在对话中提出需求，例如“整理指定群最近的讨论”“更新任务进展”“回顾这段沟通”。
