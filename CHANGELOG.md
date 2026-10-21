@@ -81,3 +81,20 @@ Tool changes only: skills, rules, scripts, templates, and documentation. Actual 
 - Language: translate the migrated history into English; both logs use English independently of `report_language`. Business reports and thinking notes retain their configured language.
 - Documentation: align the skill, record rules, repository instructions, and both README files with the log split. Keep the reusable entry format in the record rules.
 - Preservation: retain original dates and all historical details across the two logs; do not invent missing times or alter existing reports.
+
+## 2026-10-21 15:55 +08:00 — Separate README naming examples by language
+
+- Change: use English report filename examples in the English README and Chinese examples in the Chinese README, with links between the two versions.
+- Readability: move directory descriptions below the trees to keep path examples compact.
+- Scope: documentation only; retain the configured report language, Chinese default, and existing filenames.
+
+## 2026-10-21 16:05 +08:00 — Align naming rules with README language separation
+
+- Change: use English filename examples in record rules and distinguish documentation examples from actual output naming across the repository instructions, configuration guide, and local skill.
+- Language: new authored topic text and document-type labels follow `report_language`; preserve source names, structural names, type markers, and date/time formats.
+- Preservation: do not translate, rename, move, or regenerate existing reports to match examples or language setting changes. No existing reports were changed.
+
+## 2026-10-21 16:28 +08:00 — Restore concise directory descriptions
+
+- Change: add short inline descriptions to the directory trees in both README files for easier scanning.
+- Preservation: retain language-specific filename examples and the detailed explanations below each tree.

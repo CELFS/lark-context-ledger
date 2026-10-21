@@ -12,6 +12,8 @@ Read the user-maintained local JSON before running. Invalid JSON, missing or inv
 
 The report setting controls AI-authored summaries, advice, headings, and new document labels. The builder localizes transcript labels and explanatory text; it copies the reviewed summary draft without translation. Original messages, quotations, names, and source titles remain in their source language. Changing the setting does not automatically translate old reports or rename existing files. The author prepares new titles and drafts in the configured language; a previously prepared draft needs explicit revision before rebuilding in another language.
 
+English documentation uses English directory and filename examples. Actual new output uses `report_language` for authored topic text in directory and file names and document-type labels; source names remain unchanged. Structural names, type markers, and date/time formats stay fixed as specified in [record rules](../rules/records.md). Documentation language does not override the `zh` default. Do not translate, rename, move, or regenerate existing reports to match these examples or a changed language setting.
+
 Purpose and analysis requirements belong in Markdown rules. Users do not maintain IDs, types, versions, enable flags, or confirmation metadata. Scheduling and execution policy require separate confirmation.
 
 ## Name resolution

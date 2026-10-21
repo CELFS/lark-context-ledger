@@ -4,6 +4,8 @@ Save tasks, notices, reviews, and thinking notes under `output/reports/YYYYMMDD/
 
 Read `report_language` from `config/sources.local.json`: default `zh`; supported values `zh` and `en`. Use it for authored summaries, advice, headings, status labels, and new document labels. The root `CHANGELOG.md` and report repository `LOG.md` are exceptions: both use English. Preserve original messages, quotations, names, and source titles. Existing documents and filenames are not translated or renamed automatically. Template labels illustrate meaning and must be rendered in the configured language, except for the English log format below.
 
+Directory and filename examples in English instructions use English. They illustrate the format, not the actual output language. For new output, write authored topic text in directory and file names and document-type labels in `report_language`: Chinese for `zh`, English for `en`. Preserve actual source names. Keep structural names (`output`, `reports`, `work`, `state`, `attachments`), type markers (`topic`, `watch`, `thinking`), numbering, and date/time formats unchanged. Chinese naming examples are in [README.zh-CN.md](../README.zh-CN.md). These conventions apply to new output only; do not translate, rename, move, or regenerate existing reports merely to align them with the examples or a language setting change.
+
 ## Classification and relationships
 
 - Specified communication: preserve sources and connect evidence about the same item across conversations without duplicating tasks.
@@ -65,10 +67,10 @@ NN is a two-digit daily creation sequence shared across all three types; append 
 
 Conversation tasks (`topic` and `watch`) use the two-document layout below. Thinking notes use the single-document layout in “Thinking notes”.
 
-Filenames contain preparation date `YYYYMMDD`, source or specific topic, and document type. State the message coverage in the document. Default Chinese examples are below; use the configured language for new authored labels while preserving source names and existing filenames.
+Filenames contain preparation date `YYYYMMDD`, source or specific topic, and document type. State the message coverage in the document. The following examples use English labels for `report_language: "en"`; use the configured language for new authored labels while preserving source names and existing filenames.
 
-- `YYYYMMDD-来源或主题-整理稿.md`: necessary background, current understanding, key changes, unresolved questions, and next steps. Explain topics separately, with short date-and-speaker links. Omit CLI fields, long URLs, collection statistics, and internal process details.
-- `YYYYMMDD-来源或主题-原文归档.md`: chronological messages from the range, each once, with speaker, timestamp, and reply relationships. Preserve full original bodies. Reference the same message across topics without copying it repeatedly. Internal IDs may be hidden anchors, not visible fields.
+- `YYYYMMDD-topic-summary.md`: necessary background, current understanding, key changes, unresolved questions, and next steps. Explain topics separately, with short date-and-speaker links. Omit CLI fields, long URLs, collection statistics, and internal process details.
+- `YYYYMMDD-topic-transcript.md`: chronological messages from the range, each once, with speaker, timestamp, and reply relationships. Preserve full original bodies. Reference the same message across topics without copying it repeatedly. Internal IDs may be hidden anchors, not visible fields.
 - `attachments/`: save each original attachment once and link to it; do not repeat its full contents. Exclude attachments from Git.
 
 Explain scope and material completeness limitations once. Use the transcript for verification and the summary for daily work. Update summaries and incremental originals instead of rereading or rewriting all accumulated material every run.
@@ -77,7 +79,7 @@ Explain scope and material completeness limitations once. Use the transcript for
 
 Save a thinking note only when the user explicitly requests saving or confirms the proposed save. Ordinary discussion, venting, or asking for advice does not authorize writing the user's views into a note or business report.
 
-- Save one dated file, `YYYYMMDD-主题.md`, under `NN-thinking-topic/`. Identify its type as `thinking`, preparation date, and discussion source in the configured report language.
+- Save one dated file, `YYYYMMDD-topic.md`, under `NN-thinking-topic/`. The example uses English; write new topic text in the configured report language. Identify its type as `thinking`, preparation date, and discussion source in the configured report language.
 - Keep reusable self-reminder principles and the supporting discussion together when requested. State the triggering context, distinguish observations from interpretations, and preserve uncertainty.
 - Link related topics and available evidence without duplicating their transcripts. A separate transcript and attachment directory are not required; reuse existing originals and attachments when relevant.
 - Use material supplied in the conversation or already authorized and collected. A request to save reflection does not authorize additional Lark reads; follow collection rules if new collection is separately requested.

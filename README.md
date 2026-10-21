@@ -12,23 +12,27 @@ Ask explicitly to save a personal reflection as `thinking` when you want to keep
 
 Conversation tasks provide two documents; thinking notes use one dated Markdown file:
 
+This example uses English report names (`report_language: "en"`). For Chinese naming examples, see the [Chinese README](README.zh-CN.md).
+
 ```text
 output/
   reports/YYYYMMDD/
     NN-topic-MMDD_HHmm-MMDD_HHmm-topic-source/
-      YYYYMMDD-主题-整理稿.md       Daily reading: background, conclusions, changes, next steps
-      YYYYMMDD-主题-原文归档.md     Evidence: speakers, timestamps, messages, reply relationships
-      attachments/                Local only, excluded from the report repository
-    NN-watch-MMDD_HHmm-topic-source/  Ongoing monitoring, start time only; same document layout
-    NN-thinking-topic/
-      YYYYMMDD-主题.md             Personal reflection: principles, discussion, and source links
-  work/                           Working materials, ignored by the project repository
-  state/                          Collection state, ignored by the project repository
+      YYYYMMDD-topic-summary.md       Daily reading
+      YYYYMMDD-topic-transcript.md    Original message evidence
+      attachments/                   Local attachments; Git-ignored
+    NN-watch-MMDD_HHmm-topic-source/  Ongoing monitoring; same layout
+    NN-thinking-topic/               Personal reflection
+      YYYYMMDD-topic.md              Principles, discussion, and sources
+  work/                              Working materials; Git-ignored
+  state/                             Collection state; Git-ignored
 ```
+
+The summary provides background, conclusions, changes, and next steps for daily reading. The transcript preserves speakers, timestamps, messages, and reply relationships as evidence. A `watch` directory uses the same two-document layout. Thinking notes preserve personal reflection, principles, discussion, and source links. Attachments stay local and are excluded from the report repository; `work/` holds working materials and `state/` holds collection state, both ignored by the project repository.
 
 The outer date is the creation date. NN is a shared daily sequence across all three types; append without renumbering. `topic` includes message start and end times; `watch` includes only the start time; `thinking` does not require a message time range or chat source. Ongoing conversation updates keep the original directory and record the latest coverage inside the documents. Updates to the same thinking note also keep its original directory. All times use UTC+8. Naming a directory `watch` does not activate monitoring. Task working materials mirror the date and directory name under `output/work/`.
 
-Conversation filenames include the preparation date, source or specific topic, and document type. The examples show the default Chinese naming; use the configured report language for new document labels. Preserve actual source names. Existing filenames remain unchanged. Keep each original message once, link attachments without repeating their full contents, and read the summary first. Reuse collected data and update incrementally.
+Conversation filenames include the preparation date, source or specific topic, and document type. Use the configured report language for new document labels; the README language does not change the default report language (`zh`). Preserve actual source names. Existing filenames remain unchanged. Keep each original message once, link attachments without repeating their full contents, and read the summary first. Reuse collected data and update incrementally.
 
 A thinking note links related topics and existing evidence without copying transcripts. Its principles remain personal reflection; they do not automatically become project rules, permanent user preferences, or tasks. Save thinking notes directly as Markdown; the conversation collector and two-document builder are not required.
 

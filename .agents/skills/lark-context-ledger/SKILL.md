@@ -9,6 +9,8 @@ Follow [AGENTS.md](../../../AGENTS.md). All state updates are local, and suggest
 
 Read `report_language` from `config/sources.local.json`: default `zh`, supported values `zh` and `en`. Write summaries, advice, and new report labels in that language. The root `CHANGELOG.md` and `output/reports/LOG.md` always use English. Preserve original messages and quotations. English instructions do not change the Chinese report default. Do not automatically translate existing reports or rename files.
 
+English directory and filename examples illustrate format only. Actual new output uses `report_language` for authored topic text in directory and file names and document-type labels, while preserving source names and fixed structural names. Follow the naming details in [record rules](../../../rules/records.md). Do not translate, rename, move, or regenerate existing reports to match examples or a changed language setting.
+
 ## Read only what is needed
 
 - Collection or monitoring: read [configuration](../../../config/sources.md), the real local JSON, and [collection rules](../../../rules/sync.md). Before using Lark CLI, read the installed `lark-shared` and relevant domain skill. Their sending or writing capabilities do not grant authorization here.
