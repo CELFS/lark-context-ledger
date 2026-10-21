@@ -32,7 +32,7 @@ output/
 
 thinking 通过链接关联相关 topic 和已有证据，不重复复制原文。笔记中的原则属于个人思考，不自动变成项目规则、长期偏好或任务。直接保存 Markdown 笔记即可，不要求运行会话采集脚本或两份文档生成器。
 
-README 仅说明用途与用法；具体需求和结果全部在 output/。根 LOG.md 只记录不含具体业务内容的维护或运行日志。
+README 仅说明用途与用法；具体需求和结果全部在 output/。根目录 `CHANGELOG.md` 记录 skill、规则、脚本、模板和说明文档等工具变更；实际采集、整理、报告生成与维护操作写入 `output/reports/LOG.md`，按需关联报告。具体任务进展保留在对应报告中。可复用日志格式集中维护在[记录规则](rules/records.md)。
 
 项目仓库忽略整个 `output/`。`output/reports/` 用于独立的本地 Git 仓库，保存报告版本；附件由其内部 `.gitignore` 忽略，过程材料和同步状态不纳入报告仓库。独立仓库由用户手动初始化和提交，不配置远程地址。
 
@@ -40,7 +40,7 @@ README 仅说明用途与用法；具体需求和结果全部在 output/。根 L
 
 真实配置使用 `config/sources.local.json`，已 Git 忽略；格式见 [配置说明](config/sources.md) 和 [示例](config/sources.example.json)。必填 since 与 chats；可选 report_language，默认 zh，支持 zh/en。名称定位由工具处理，重名先确认。
 
-报告语言由本地 JSON 的 `report_language` 控制：`"zh"` 为中文（默认），`"en"` 为英文。AI 按该语言撰写整理稿、建议和新报告标题，生成器切换原稿的说明与标签；聊天原文、引用、姓名和群名保留原文。修改配置不自动翻译旧报告，也不重命名已有文件。通用规则以英文维护，不影响报告默认中文。
+报告语言由本地 JSON 的 `report_language` 控制：`"zh"` 为中文（默认），`"en"` 为英文。AI 按该语言撰写整理稿、建议和新报告标题，生成器切换原稿的说明与标签；聊天原文、引用、姓名和群名保留原文。修改配置不自动翻译旧报告，也不重命名已有文件。通用规则以英文维护，不影响报告默认中文。`CHANGELOG.md` 和 `output/reports/LOG.md` 始终使用英文，不受 `report_language` 影响。
 
 以下命令在仓库根目录执行，使用 Python 标准库和已授权的飞书 CLI：
 
@@ -55,4 +55,4 @@ python3 scripts/build_document.py 'output/work/YYYYMMDD/任务目录/topic-index
 
 ## 规则入口
 
-[总边界](AGENTS.md) · [本地技能](.agents/skills/lark-context-ledger/SKILL.md) · [采集规则](rules/sync.md) · [记录规则](rules/records.md) · [沟通回顾](rules/communication.md) · [日志](LOG.md)
+[总边界](AGENTS.md) · [本地技能](.agents/skills/lark-context-ledger/SKILL.md) · [采集规则](rules/sync.md) · [记录规则](rules/records.md) · [沟通回顾](rules/communication.md) · [工具变更记录](CHANGELOG.md)

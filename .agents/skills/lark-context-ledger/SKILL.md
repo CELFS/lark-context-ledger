@@ -7,7 +7,7 @@ description: Collect authorized Lark or Feishu conversations, organize work cont
 
 Follow [AGENTS.md](../../../AGENTS.md). All state updates are local, and suggestions are for the user to act on.
 
-Read `report_language` from `config/sources.local.json`: default `zh`, supported values `zh` and `en`. Write summaries, advice, and new report labels in that language. Preserve original messages and quotations. English instructions do not change the Chinese report default. Do not automatically translate existing reports or rename files.
+Read `report_language` from `config/sources.local.json`: default `zh`, supported values `zh` and `en`. Write summaries, advice, and new report labels in that language. The root `CHANGELOG.md` and `output/reports/LOG.md` always use English. Preserve original messages and quotations. English instructions do not change the Chinese report default. Do not automatically translate existing reports or rename files.
 
 ## Read only what is needed
 
@@ -22,7 +22,7 @@ Read `report_language` from `config/sources.local.json`: default `zh`, supported
 1. Identify whether this run is collection, organization, review, or requested personal reflection. Start with new evidence, user feedback, and the current summary. Read historical transcripts and attachments only when needed.
 2. Check sources, time ranges, message references, and context. State evidence gaps; do not invent missing details. Never collect from unconfirmed sources.
 3. Merge new evidence into existing items. Distinguish tasks, notices, and exploration; suggestions do not become formal requirements automatically.
-4. Save final documents in `output/reports/YYYYMMDD/<task-directory>/`, working materials in `output/work/`, and collection state in `output/state/`. The project ignores all output; the separate local report repository excludes attachments. Keep task changes within output and business-free maintenance notes in the root LOG.
+4. Save final documents in `output/reports/YYYYMMDD/<task-directory>/`, working materials in `output/work/`, and collection state in `output/state/`. The project ignores all output; the separate local report repository excludes attachments. Record actual collection, organization, and report operations in `output/reports/LOG.md`; record tool changes only in the root `CHANGELOG.md`. Follow the log rules in [record rules](../../../rules/records.md); both logs use English.
 5. Verify traceable sources, preserved closed states, evidence-based owners and deadlines, and absence of remote writes.
 6. Answer direct user questions. Background reminders are only for meaningful progress, task changes, required action, or collection failures. Stay silent when unchanged; never promise continuous monitoring before it exists.
 

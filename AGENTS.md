@@ -27,12 +27,12 @@ Proceed with authorized local organization. Never guess unconfirmed sources, sch
 - Directory names use `NN-topic-MMDD_HHmm-MMDD_HHmm-topic-source`, `NN-watch-MMDD_HHmm-topic-source`, or `NN-thinking-topic`. The outer date is the creation date; append daily sequence numbers across all three types without renumbering. Ongoing monitoring has only a start time and keeps its directory; thinking notes do not require message times. See `rules/records.md`.
 - The project repository ignores all of `output/`. The user initializes and maintains `output/reports/` as a separate local repository if desired; attachments remain ignored. AI performs no Git mutations.
 - Working materials go in `output/work/`; collection state goes in `output/state/`. Neither belongs in the report repository. Keep each original message once with speaker, time, text, and reply relationships. Hide internal fields and do not embed attachment contents repeatedly.
-- Task-specific requests and indexes belong in `output/work/YYYYMMDD/<task-directory>/`. The root `LOG.md` contains only maintenance or execution logs without business details.
+- Task-specific requests and indexes belong in `output/work/YYYYMMDD/<task-directory>/`. The root `CHANGELOG.md` records tool changes only, without business details. Actual collection, organization, and report maintenance history belongs in `output/reports/LOG.md`; both logs use English regardless of `report_language`.
 - README files describe purpose, structure, and usage; skills and rules contain reusable instructions only, without specific conversations, task dates, business content, or result links.
 
 ## Local maintenance
 
-- Maintain reusable instructions and code comments in English. Use the configured report language for reports. Use UTC+8 and distinguish message time from recording time.
+- Maintain reusable instructions and code comments in English. Use the configured report language for reports and thinking notes; write `CHANGELOG.md` and `output/reports/LOG.md` in English. Use UTC+8 and distinguish message time from recording time.
 - Git is read-only for AI: no initialization, staging, commits, checkout, or resets.
 - Do not install dependencies, start services, or create schedules unless separately requested. Never run formatters, use /private/tmp, or edit user-maintained temp/ requirements.
 - Preserve existing records and explanatory comments. Append evidence and changes; do not delete items merely because they have not been mentioned recently.

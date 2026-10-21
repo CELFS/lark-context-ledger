@@ -2,7 +2,7 @@
 
 Save tasks, notices, reviews, and thinking notes under `output/reports/YYYYMMDD/<task-directory>/`. Start daily reading with the summary or thinking note. Working files go in `output/work/`, state in `output/state/`. The project ignores all output; the independent local report repository excludes attachments.
 
-Read `report_language` from `config/sources.local.json`: default `zh`; supported values `zh` and `en`. Use it for authored summaries, advice, headings, status labels, and new document labels. Preserve original messages, quotations, names, and source titles. Existing documents and filenames are not translated or renamed automatically. Template labels illustrate meaning and must be rendered in the configured language.
+Read `report_language` from `config/sources.local.json`: default `zh`; supported values `zh` and `en`. Use it for authored summaries, advice, headings, status labels, and new document labels. The root `CHANGELOG.md` and report repository `LOG.md` are exceptions: both use English. Preserve original messages, quotations, names, and source titles. Existing documents and filenames are not translated or renamed automatically. Template labels illustrate meaning and must be rendered in the configured language, except for the English log format below.
 
 ## Classification and relationships
 
@@ -14,7 +14,7 @@ Read `report_language` from `config/sources.local.json`: default `zh`; supported
 
 Preserve existing stable item identifiers for evidence and state relationships, not directory names. Use one writer; resolve concurrent conflicts first. Moving a directory does not change item identity.
 
-The summary's current understanding and task states are the daily maintenance entry point; the transcript supplies evidence. Do not maintain a separate competing task ledger. Root LOG entries contain only maintenance or execution changes without conversations, business scope, conclusions, or result links. Item-level logs retain concrete changes.
+The summary's current understanding and task states are the daily maintenance entry point; the transcript supplies evidence. Do not maintain a separate competing task ledger. Keep tool development in the root `CHANGELOG.md`, actual usage history in `output/reports/LOG.md`, and concrete task progress in the corresponding report.
 
 ## States and evidence
 
@@ -30,12 +30,18 @@ For tasks, keep a stable ID, item, state, owner, first discovery time, latest ev
 - Separate formal requirements, user feedback, and analysis. Apply user corrections to the current understanding while preserving earlier wording and correction evidence.
 - When new requirements replace old ones, record when, from whom, and with what impact. Do not erase the old requirement.
 
-## LOG entries
+## Log ownership and entries
 
-Use `YYYY-MM-DD HH:mm +08:00`. Each entry covers one change, usually with 2–4 short bullets containing only meaningful fields. Write item-level entries in the report language; maintain the project-level LOG as generic maintenance history.
+- Root `CHANGELOG.md`: tool changes to skills, rules, scripts, templates, and documentation. Keep conversation details, collection results, business conclusions, and report result links out of this file.
+- `output/reports/LOG.md`: actual collection, organization, report generation, and report maintenance operations. Record the affected scope, result, verification or gaps, and related report references when useful. Keep detailed business progress in its topic or thinking note; the usage log is not another task ledger.
+- Mixed work: split tool changes and actual usage into their respective logs. Tool development alone does not establish a successful collection or report run. Do not infer completed operations from a request, silence, or a partial result.
+
+Both files use English regardless of `report_language`; task-level progress within reports still uses the configured report language. The tool repository defines the convention and reusable format here; actual usage entries belong in the report repository, not in a tracked example or template.
+
+Use `YYYY-MM-DD HH:mm +08:00` for new entries, distinguishing operation time from recording time when different. Each entry covers one change or operation, usually with 2–4 short bullets containing only meaningful fields. During migration, retain the precision of historical dates and do not invent missing times.
 
 ```markdown
-## YYYY-MM-DD HH:mm +08:00 — Item change
+## YYYY-MM-DD HH:mm +08:00 — Change or operation
 
 - Change: what happened and the evidence.
 - Confirmed / unresolved: current understanding and gaps.
@@ -43,7 +49,7 @@ Use `YYYY-MM-DD HH:mm +08:00`. Each entry covers one change, usually with 2–4 
 - Source: message reference and related item file.
 ```
 
-Keep task content and result links out of the root LOG; do not copy chats or entire task lists into it. Provide sufficient context in the report. Cite only necessary excerpts with speaker and time; do not present hearsay as a direct commitment.
+Append usage results after the operation, including failures or partial coverage when relevant. Reuse the existing `output/reports/LOG.md`; do not overwrite its history. Preserve historical records when splitting or translating logs, and do not translate existing reports as a side effect. Do not copy chats or entire task lists into either log. Provide sufficient context in the report. Cite only necessary excerpts with speaker and time; do not present hearsay as a direct commitment.
 
 ## Directory naming
 

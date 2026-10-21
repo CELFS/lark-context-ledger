@@ -32,7 +32,7 @@ Conversation filenames include the preparation date, source or specific topic, a
 
 A thinking note links related topics and existing evidence without copying transcripts. Its principles remain personal reflection; they do not automatically become project rules, permanent user preferences, or tasks. Save thinking notes directly as Markdown; the conversation collector and two-document builder are not required.
 
-README files describe the project and usage only. Task-specific requests and results belong in `output/`. The root `LOG.md` records maintenance or execution changes without business content.
+README files describe the project and usage only. Task-specific requests and results belong in `output/`. The root `CHANGELOG.md` records tool changes to skills, rules, scripts, templates, and documentation. Actual collection, organization, and report maintenance operations are recorded in `output/reports/LOG.md`, with related report references where useful. Keep detailed task progress in its report. The reusable log format is maintained in [record rules](rules/records.md).
 
 The project repository ignores all of `output/`. The user may initialize `output/reports/` as a separate local Git repository to keep report history, without configuring a remote. Its own `.gitignore` excludes attachments. Working materials and collection state are outside the report repository. Git initialization and commits are performed by the user.
 
@@ -40,7 +40,7 @@ The project repository ignores all of `output/`. The user may initialize `output
 
 The real configuration is `config/sources.local.json`, excluded from Git. See [configuration](config/sources.md) and the [example](config/sources.example.json). Required fields: `since` and `chats`. Optional: `report_language`, default `zh`; supported values are `zh` and `en`. Examples are never used as runtime configuration or authorization.
 
-AI writes summaries, advice, and new report titles in the configured report language. The document builder switches transcript labels and explanatory text. Original messages, quotations, names, and source titles remain unchanged. Changing the setting does not translate existing reports or rename files. Repository instructions are maintained in English; reports still default to Chinese.
+AI writes summaries, advice, and new report titles in the configured report language. The document builder switches transcript labels and explanatory text. Original messages, quotations, names, and source titles remain unchanged. Changing the setting does not translate existing reports or rename files. Repository instructions are maintained in English; reports still default to Chinese. Both `CHANGELOG.md` and `output/reports/LOG.md` always use English, independently of `report_language`.
 
 Run these commands from the repository root using Python's standard library and an authorized Lark CLI:
 
@@ -55,4 +55,4 @@ Use `sync.py resolve` to resolve names. Compare a forwarded backup with `reconci
 
 ## Rules
 
-[Boundaries](AGENTS.md) · [Local skill](.agents/skills/lark-context-ledger/SKILL.md) · [Collection](rules/sync.md) · [Records](rules/records.md) · [Communication review](rules/communication.md) · [Maintenance log](LOG.md)
+[Boundaries](AGENTS.md) · [Local skill](.agents/skills/lark-context-ledger/SKILL.md) · [Collection](rules/sync.md) · [Records](rules/records.md) · [Communication review](rules/communication.md) · [Tool changelog](CHANGELOG.md)
