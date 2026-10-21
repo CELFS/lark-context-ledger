@@ -15,7 +15,7 @@ This personal work information system only collects, organizes, reviews, monitor
 
 ## Entry point
 
-For collection, task organization, or communication review, read [.agents/skills/lark-context-ledger/SKILL.md](.agents/skills/lark-context-ledger/SKILL.md), then only the relevant linked rules.
+For collection, task organization, communication review, or requested personal reflection notes, read [.agents/skills/lark-context-ledger/SKILL.md](.agents/skills/lark-context-ledger/SKILL.md), then only the relevant linked rules.
 
 Proceed with authorized local organization. Never guess unconfirmed sources, schedules, or start dates. Without valid collection configuration, only organize material directly supplied by the user and do not call Lark.
 
@@ -23,8 +23,8 @@ Proceed with authorized local organization. Never guess unconfirmed sources, sch
 
 - Real configuration comes only from `config/sources.local.json`, which is Git-ignored. The example is not a runtime fallback. Do not copy real configuration into tracked rules or examples.
 - Report language comes from `report_language` in that JSON: `zh` by default, or `en`. Omission means `zh`; invalid values stop execution. Write summaries, advice, headings, and new document labels in that language. Preserve original messages, quotations, names, and source titles. Do not translate old reports or rename existing files automatically.
-- Put all output under `output/`. Each task under `reports/YYYYMMDD/<task-directory>/` provides only a dated summary, a dated transcript, and `attachments/`. Daily reading starts with the summary.
-- Directory names use `NN-topic-MMDD_HHmm-MMDD_HHmm-topic-source` or `NN-watch-MMDD_HHmm-topic-source`. The outer date is the creation date; append daily sequence numbers without renumbering. Ongoing monitoring has only a start time and keeps its directory. See `rules/records.md`.
+- Put all output under `output/`. Conversation tasks under `reports/YYYYMMDD/<task-directory>/` provide only a dated summary, a dated transcript, and `attachments/`. Personal reflection (`thinking`) uses one dated note, saved only at the user's explicit request or confirmation. Daily reading starts with the summary or thinking note.
+- Directory names use `NN-topic-MMDD_HHmm-MMDD_HHmm-topic-source`, `NN-watch-MMDD_HHmm-topic-source`, or `NN-thinking-topic`. The outer date is the creation date; append daily sequence numbers across all three types without renumbering. Ongoing monitoring has only a start time and keeps its directory; thinking notes do not require message times. See `rules/records.md`.
 - The project repository ignores all of `output/`. The user initializes and maintains `output/reports/` as a separate local repository if desired; attachments remain ignored. AI performs no Git mutations.
 - Working materials go in `output/work/`; collection state goes in `output/state/`. Neither belongs in the report repository. Keep each original message once with speaker, time, text, and reply relationships. Hide internal fields and do not embed attachment contents repeatedly.
 - Task-specific requests and indexes belong in `output/work/YYYYMMDD/<task-directory>/`. The root `LOG.md` contains only maintenance or execution logs without business details.

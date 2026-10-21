@@ -1,6 +1,6 @@
-# Records and tasks
+# Records, tasks, and thinking notes
 
-Save tasks, notices, and reviews under `output/reports/YYYYMMDD/<task-directory>/`. Start daily reading with the summary. Working files go in `output/work/`, state in `output/state/`. The project ignores all output; the independent local report repository excludes attachments.
+Save tasks, notices, reviews, and thinking notes under `output/reports/YYYYMMDD/<task-directory>/`. Start daily reading with the summary or thinking note. Working files go in `output/work/`, state in `output/state/`. The project ignores all output; the independent local report repository excludes attachments.
 
 Read `report_language` from `config/sources.local.json`: default `zh`; supported values `zh` and `en`. Use it for authored summaries, advice, headings, status labels, and new document labels. Preserve original messages, quotations, names, and source titles. Existing documents and filenames are not translated or renamed automatically. Template labels illustrate meaning and must be rendered in the configured language.
 
@@ -10,6 +10,7 @@ Read `report_language` from `config/sources.local.json`: default `zh`; supported
 - Company notices: record author, applicability, effective date, requirements, and related items. Mark applicability as unconfirmed when unclear.
 - Task progress: distinguish submission, receipt, review, confirmation, and final delivery. One intermediate step does not prove completion.
 - Exploration: record ideas, experiments, and questions as exploration. Analysis and suggestions do not become formal requirements automatically.
+- Personal reflection (`thinking`): save explicitly requested reflection and self-reminder principles separately from work progress. See “Thinking notes” below.
 
 Preserve existing stable item identifiers for evidence and state relationships, not directory names. Use one writer; resolve concurrent conflicts first. Moving a directory does not change item identity.
 
@@ -17,9 +18,9 @@ The summary's current understanding and task states are the daily maintenance en
 
 ## States and evidence
 
-Task states: action needed, reply needed, waiting on others, confirmation needed, completed, canceled. Notices and exploration need not use task states. In Chinese reports use 待行动、待回复、等别人、待确认、已完成、已取消.
+Task states: action needed, reply needed, waiting on others, confirmation needed, completed, canceled. Notices, exploration, and thinking notes need not use task states. In Chinese reports use 待行动、待回复、等别人、待确认、已完成、已取消.
 
-Keep a stable ID, item, state, owner, first discovery time, latest evidence, source message IDs and links, deadline, and suggested next step. If absent, explicitly label the deadline as unspecified and owner as unconfirmed, in the report language. Never default ownership to the user.
+For tasks, keep a stable ID, item, state, owner, first discovery time, latest evidence, source message IDs and links, deadline, and suggested next step. If absent, explicitly label the deadline as unspecified and owner as unconfirmed, in the report language. Never default ownership to the user.
 
 - The last speaker does not determine who owes a reply. Acknowledgment does not prove completion.
 - Close an item only with explicit completion evidence or user confirmation. With incomplete records, say no explicit reply was observed or confirmation is needed; do not accuse the user of missing a reply.
@@ -50,10 +51,13 @@ The outer `YYYYMMDD` is the creation date. Tasks created on the same day share t
 
 - Topic summary: `NN-topic-MMDD_HHmm-MMDD_HHmm-topic-source/`, with message start and end times.
 - Ongoing monitoring: `NN-watch-MMDD_HHmm-topic-source/`, with message start time only.
+- Personal reflection: `NN-thinking-topic/`, without a message time range or a required chat source.
 
-NN is a two-digit daily creation sequence shared across both types; append without renumbering. Use UTC+8 and `-` as the range separator. Keep actual group or private-chat names. Ongoing updates keep the original date and directory; record latest coverage inside the documents. The directory type does not authorize monitoring or subscription setup. Mirror task working files under `output/work/YYYYMMDD/<task-directory>/`.
+NN is a two-digit daily creation sequence shared across all three types; append without renumbering. Use UTC+8 and `-` as the range separator for conversation time ranges. Keep actual group or private-chat names when naming conversation records. Ongoing updates keep the original date and directory; record latest coverage inside the documents. Updates to the same thinking note also keep its original date and directory. The directory type does not authorize monitoring or subscription setup. Mirror task working files under `output/work/YYYYMMDD/<task-directory>/`.
 
 ## Two documents
+
+Conversation tasks (`topic` and `watch`) use the two-document layout below. Thinking notes use the single-document layout in “Thinking notes”.
 
 Filenames contain preparation date `YYYYMMDD`, source or specific topic, and document type. State the message coverage in the document. Default Chinese examples are below; use the configured language for new authored labels while preserving source names and existing filenames.
 
@@ -63,7 +67,21 @@ Filenames contain preparation date `YYYYMMDD`, source or specific topic, and doc
 
 Explain scope and material completeness limitations once. Use the transcript for verification and the summary for daily work. Update summaries and incremental originals instead of rereading or rewriting all accumulated material every run.
 
+## Thinking notes
+
+Save a thinking note only when the user explicitly requests saving or confirms the proposed save. Ordinary discussion, venting, or asking for advice does not authorize writing the user's views into a note or business report.
+
+- Save one dated file, `YYYYMMDD-主题.md`, under `NN-thinking-topic/`. Identify its type as `thinking`, preparation date, and discussion source in the configured report language.
+- Keep reusable self-reminder principles and the supporting discussion together when requested. State the triggering context, distinguish observations from interpretations, and preserve uncertainty.
+- Link related topics and available evidence without duplicating their transcripts. A separate transcript and attachment directory are not required; reuse existing originals and attachments when relevant.
+- Use material supplied in the conversation or already authorized and collected. A request to save reflection does not authorize additional Lark reads; follow collection rules if new collection is separately requested.
+- Follow the personal reflection boundaries in [communication.md](communication.md). Saving a note does not make its principles project rules, permanent user preferences, or assigned tasks.
+
+Write the note directly as Markdown. The conversation collector and two-document builder are not required for thinking notes; do not invent chat IDs, time ranges, or a conversation index to fit their format. Existing reports and directories remain unchanged unless the user requests migration.
+
 ## Execution
+
+The collection and document-building steps below apply to conversation archives. For thinking notes, follow “Thinking notes” above and verify the saved content and references.
 
 1. Keep the task request, scope, and process in `output/work/YYYYMMDD/<task-directory>/`, not README, skill, or reusable rules.
 2. Collect authorized sources incrementally with `scripts/sync.py`, complete pagination, deduplicate, and save cursors. Read batches of at most 100 messages from `output/work/sources/`.

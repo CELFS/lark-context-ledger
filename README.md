@@ -8,7 +8,9 @@ A personal work context ledger built on Lark CLI. Collect communication, preserv
 
 Set a start date and chat names in `config/sources.local.json`, then ask for a topic summary, progress update, or communication review. Names are resolved internally; ambiguous matches require confirmation.
 
-Each task provides two documents:
+Ask explicitly to save a personal reflection as `thinking` when you want to keep discussion and self-reminder principles for later reading. Ordinary discussion does not save your views automatically or authorize Lark collection.
+
+Conversation tasks provide two documents; thinking notes use one dated Markdown file:
 
 ```text
 output/
@@ -18,13 +20,17 @@ output/
       YYYYMMDD-主题-原文归档.md     Evidence: speakers, timestamps, messages, reply relationships
       attachments/                Local only, excluded from the report repository
     NN-watch-MMDD_HHmm-topic-source/  Ongoing monitoring, start time only; same document layout
+    NN-thinking-topic/
+      YYYYMMDD-主题.md             Personal reflection: principles, discussion, and source links
   work/                           Working materials, ignored by the project repository
   state/                          Collection state, ignored by the project repository
 ```
 
-The outer date is the creation date. NN is a shared daily sequence across both types; append without renumbering. `topic` includes message start and end times; `watch` includes only the start time. Ongoing updates keep the original directory and record the latest coverage inside the documents. All times use UTC+8. Naming a directory `watch` does not activate monitoring. Task working materials mirror the date and directory name under `output/work/`.
+The outer date is the creation date. NN is a shared daily sequence across all three types; append without renumbering. `topic` includes message start and end times; `watch` includes only the start time; `thinking` does not require a message time range or chat source. Ongoing conversation updates keep the original directory and record the latest coverage inside the documents. Updates to the same thinking note also keep its original directory. All times use UTC+8. Naming a directory `watch` does not activate monitoring. Task working materials mirror the date and directory name under `output/work/`.
 
-Filenames include the preparation date, source or specific topic, and document type. The examples show the default Chinese naming; use the configured report language for new document labels. Preserve actual source names. Existing filenames remain unchanged. Keep each original message once, link attachments without repeating their full contents, and read the summary first. Reuse collected data and update incrementally.
+Conversation filenames include the preparation date, source or specific topic, and document type. The examples show the default Chinese naming; use the configured report language for new document labels. Preserve actual source names. Existing filenames remain unchanged. Keep each original message once, link attachments without repeating their full contents, and read the summary first. Reuse collected data and update incrementally.
+
+A thinking note links related topics and existing evidence without copying transcripts. Its principles remain personal reflection; they do not automatically become project rules, permanent user preferences, or tasks. Save thinking notes directly as Markdown; the conversation collector and two-document builder are not required.
 
 README files describe the project and usage only. Task-specific requests and results belong in `output/`. The root `LOG.md` records maintenance or execution changes without business content.
 

@@ -23,3 +23,11 @@ Private-chat context may inform the user's personal understanding. Suggested ext
 One incident does not establish a stable pattern. Record supporting cases for recurring issues; turn them into lasting personal preferences or rules only after user confirmation.
 
 Distinguish observations, possible risks, suggested wording or methods, user feedback, and later outcomes. Without outcomes, do not claim advice was effective.
+
+## Personal reflection
+
+Use `thinking` for explicitly requested notes that develop personal understanding and self-reminder principles across situations. Keep event-specific communication analysis with its topic; link it from the thinking note when useful. Follow the naming and single-document layout in [records.md](records.md).
+
+Ordinary discussion of the user's feelings or position does not authorize saving it in a note or business report. After a save is requested, keep the note within that scope and distinguish observed behavior, user experience, interpretation, and unresolved questions. Do not turn judgments about motives or character into facts.
+
+Principles in a thinking note remain personal reflection. Do not automatically promote them to project requirements, permanent user preferences, or assessments of other people. Hypothetical replies remain suggestions; do not record them as sent or infer outcomes.

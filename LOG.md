@@ -67,3 +67,9 @@
 - Change: maintain reusable instructions and code comments in English and add a Chinese README. Reports default to zh; local JSON may select zh or en.
 - Behavior: localize transcript labels and author summaries in the configured language; preserve source messages, historical reports, and existing filenames.
 - Boundary: local changes only; no Lark calls or Git mutations.
+
+## 2026-10-21 14:33 +08:00 — Document independent thinking notes
+
+- Change: add thinking note routing, shared daily numbering, and a single-document layout across the skill, rules, and usage documentation.
+- Boundary: save personal reflection only when requested; note creation does not authorize collection or establish project rules, permanent preferences, or tasks.
+- Scope: documentation only; collection scripts and existing records remain unchanged.
