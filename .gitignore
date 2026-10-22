@@ -3,3 +3,6 @@
 
 # Reports are managed by a separate local repository; all process, state, and output are excluded from this project repository.
 /output/
+
+# Python bytecode cache.
+__pycache__/
